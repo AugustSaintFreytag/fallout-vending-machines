@@ -1,0 +1,41 @@
+ref rEnteredCell
+short iLoad
+
+ref rActivator
+ref rActivated
+
+short bIsActivationNotPrevented
+
+short iButton = -1
+
+ref vendingMachineActivateUDF = CompileScript "SaintVendingMachines\SVM_OnActivateVendingMachine.gek"
+ref vendingMachineLockScanUDF = CompileScript "SaintVendingMachines\SVM_ScanAndLock.gek"
+
+; On Cell Enter
+
+SetEventHandler "OnCellEnter" (begin function { ref rEnteredCell }
+	Call vendingMachineLockScanUDF rEnteredCell
+end)
+
+; Post Load Game
+
+SetEventHandler "PostLoadGame" (begin function {int iLoad}
+	if iLoad
+		Call vendingMachineLockScanUDF PlayerREF.GetParentCell
+	endif
+end)
+
+; Activate
+
+SetEventHandlerAlt "ShowOff:OnPreActivate" (begin function { rActivator, bIsActivationNotPrevented }
+	let rActivated := GetSelfAlt
+
+	if eval HasKeyword rActivated "NukaColaVendingMachine" || HasKeyword rActivated "SunsetSarsaparillaVendingMachine"
+		if eval player.IsSneaking == 1
+			return
+		endif
+
+		SetFunctionValue 0
+		Call vendingMachineActivateUDF iButton
+	endif
+end) 1::Player

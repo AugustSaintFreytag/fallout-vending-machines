@@ -1,0 +1,16 @@
+ref rObject
+
+begin Function { rObject }
+	string_var sRefId = GetFormIDString rObject
+	string_var sKey = Sv_Construct "*SVM_TimeLastLocked_%z" sRefId
+
+	float fTimeLastLocked = GetGameDaysPassed 2277 08 17
+	AuxVarSetFlt sKey fTimeLastLocked
+
+	PrintC "Setting time last locked for machine '%z' (key '%z') to %.2f day(s)." sRefId sKey fTimeLastLocked
+
+	; Clean-Up
+
+	Sv_Destruct sRefId
+	Sv_Destruct sKey
+end

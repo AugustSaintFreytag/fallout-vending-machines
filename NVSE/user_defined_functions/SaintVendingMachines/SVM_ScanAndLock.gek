@@ -1,0 +1,67 @@
+ref rEnteredCell
+
+begin Function {rEnteredCell}
+
+	; References
+
+	ref GetTimeLastLockedUDF = CompileScript "SaintVendingMachines\SVM_GetTimeLastLocked.gek"
+	ref SetTimeLastLockedUDF = CompileScript "SaintVendingMachines\SVM_SetTimeLastLocked.gek"
+	
+	; Prepare Lock Level
+
+	short luckBase = (PlayerREF.GetActorValue Luck) - 3
+	short luckBonus = GetMinOf 0 luckBase
+	short lockLevelMax = 8 - luckBonus
+	short lockLevelMaxRandom = Rand 0, lockLevelMax
+	short lockLevel = 5 + 5 * lockLevelMaxRandom
+
+	; --- Scan loaded references and lock vending machines ---
+
+	ref currentReference
+	float timeLastLocked
+
+	float daysPassed = GetGameDaysPassed 2277 08 17
+	array_var loadedReferences = PlayerREF.GetRefs 0 1 1
+	
+	string_var referenceId
+	short referenceIndex = 0
+
+	while referenceIndex < Ar_Size loadedReferences
+		let currentReference := loadedReferences[referenceIndex]
+
+		if currentReference == 0
+			let referenceIndex += 1
+			continue
+		endif
+
+		if (HasKeyword currentReference "NukaColaVendingMachine") == 0
+			let referenceIndex += 1
+			continue
+		endif
+
+		let referenceId := GetFormIDString currentReference
+		let timeLastLocked := Call GetTimeLastLockedUDF currentReference
+		
+		if currentReference.GetLocked == 0
+			if (daysPassed - timeLastLocked) > 0.75
+				PrintC "Locking vending machine '%z' with lock level %g." referenceId lockLevel
+				currentReference.Lock lockLevel
+			else
+				PrintC "Did not lock vending machine '%z', already locked recently (days passed %.2f, time last locked %.2f)." referenceId daysPassed timeLastLocked
+			endif
+		else
+			PrintC "Skipping already locked vending machine '%z'." referenceId
+		endif
+
+		; Either reference was locked or was already locked, always renew timer.
+		Call SetTimeLastLockedUDF currentReference
+		let referenceIndex += 1
+	loop
+
+	; Clean-Up
+
+	Sv_Destruct referenceId
+
+	let loadedReferences := Ar_Null
+
+end
