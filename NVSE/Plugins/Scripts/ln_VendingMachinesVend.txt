@@ -19,7 +19,7 @@ end)
 
 ; Post Load Game
 
-SetEventHandler "PostLoadGame" (begin function {int iLoad}
+SetEventHandler "PostLoadGame" (begin function { short iLoad }
 	if iLoad
 		Call vendingMachineLockScanUDF PlayerREF.GetParentCell
 	endif

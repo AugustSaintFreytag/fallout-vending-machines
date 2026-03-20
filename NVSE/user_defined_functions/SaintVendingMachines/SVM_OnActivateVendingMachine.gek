@@ -1,36 +1,25 @@
 begin function { int iButton }
 
+	; UDFs
+
 	ref vendingMachineActivateUDF = CompileScript ("SaintVendingMachines\SVM_OnActivateVendingMachine.gek")
 
-	short iIndex
-	let iIndex := -1
+	; Init
 
-	ref rActivated
-	let rActivated := GetCrosshairRef
+	short iIndex = -1
+
+	ref rActivated = GetCrosshairRef
 
 	if eval rActivated == 0
-		PrintC "Vending machine not activated."
 		return
 	endif
 
+	ref rOwner = rActivated.GetOwner
+
 	; Currency
 
-	ref rCurrency
-	string_var sCurrencyName
-
-	ref rOwner
-	let rOwner := rActivated.GetOwner
-
-	set rCurrency to PrewarMoney
-	let sCurrencyName := "Pre-War Money"
-	
-	;if eval rOwner == 0
-	;	Set rCurrency to PrewarMoney
-	;	let sCurrencyName := "Pre-War Money"
-	;Else
-	;	Set rCurrency to Caps001
-	;	let sCurrencyName := "Bottle Caps"
-	;endif
+	ref rCurrency = PrewarMoney
+	string_var sCurrencyName = "Pre-War Money"
 
 	; Sounds
 
@@ -47,27 +36,6 @@ begin function { int iButton }
 	short machinePosX = rActivated.GetPos X
 	short machinePosY = rActivated.GetPos Y
 	short machinePosZ = rActivated.GetPos Z
-
-	; Distance to Worldspace Heart (The Citadel for DC, The Strip for Vegas)
-	; float distanceToWorldspaceHeart = 0.0
-
-	; if bInDCWasteland
-	; 	float markerPosX = PentagonMarker.GetPos X
-	; 	float markerPosY = PentagonMarker.GetPos Y
-	; 	float markerPosZ = PentagonMarker.GetPos Z
-
-	; 	let distanceToWorldspaceHeart := GetDistanceBetweenPoints machinePosX machinePosY machinePosZ markerPosX markerPosY markerPosZ
-	; 	PrintC "Determined vending machine to be %g units from worldspace heart (DC Worldspace)." distanceToWorldspaceHeart
-	; elseif bInNVWasteland
-	; 	float markerPosX = FreesideMapMarker.GetPos X
-	; 	float markerPosY = FreesideMapMarker.GetPos Y
-	; 	float markerPosZ = FreesideMapMarker.GetPos Z
-
-	; 	let distanceToWorldspaceHeart := GetDistanceBetweenPoints machinePosX machinePosY machinePosZ markerPosX markerPosY markerPosZ
-	; 	PrintC "Determined vending machine to be %g units from worldspace heart (Vegas Worldspace)." distanceToWorldspaceHeart
-	; else
-	; 	distanceToWorldspaceHeart = 999999.0
-	; endif
 
 	; Vending
 
@@ -139,23 +107,21 @@ begin function { int iButton }
 		PrintC "Vending machine detected to be Nuka-Cola type."
 
 		if eval rCurrency == PrewarMoney
-			let string_var VendingMenuText := "This vending machine accepts legal US tender.%rYou have $%g in your inventory."
+			let string_var sMenuText := "This vending machine accepts legal US tender.%rYou have $%g in your inventory."
 		elseif eval rCurrency == Caps001
-			let string_var VendingMenuText := "This vending machine has been modified to accept Bottle Caps.%rYou have %g Bottle Caps in your inventory."
+			let string_var sMenuText := "This vending machine has been modified to accept Bottle Caps.%rYou have %g Bottle Caps in your inventory."
 		endif
 
 		; Nuka-Cola
 
 		if eval bHasNukaCola == 1
 			let iIndex += 1
-			let VendingMenuText += ("|Nuka-Cola ($10)")
+			let sMenuText += ("|Nuka-Cola ($10)")
 
 			if iButton == iIndex
 				if (Player.GetItemCount rCurrency) < 1
 					MessageEx "You don't have enough Pre-War Money to make this purchase."
 				else
-					; Player.RemoveItemTarget PrewarMoney rActivated 1 1
-					; rActivated.RemoveItemTarget NukaCola Player 1 1
 					Player.RemoveItem PrewarMoney 1
 					Player.AddItem NukaCola 1
 					PlaySound PHYBottleH 1
@@ -173,7 +139,7 @@ begin function { int iButton }
 
 		if eval bHasNukaColaQuantum == 1
 			let iIndex += 1
-			let VendingMenuText += ("|Nuka-Cola Quantum ($30)")
+			let sMenuText += ("|Nuka-Cola Quantum ($30)")
 
 			if iButton == iIndex
 				if (Player.GetItemCount rCurrency) < 3
@@ -196,7 +162,7 @@ begin function { int iButton }
 
 		if eval bHasNukaColaQuartz == 1
 			let iIndex += 1
-			let VendingMenuText += ("|Nuka-Cola Quartz ($50)")
+			let sMenuText += ("|Nuka-Cola Quartz ($50)")
 
 			if iButton == iIndex
 				if (Player.GetItemCount rCurrency) < 5
@@ -219,7 +185,7 @@ begin function { int iButton }
 
 		if eval bHasNukaColaVictory == 1
 			let iIndex += 1
-			let VendingMenuText += ("|Nuka-Cola Victory ($50)")
+			let sMenuText += ("|Nuka-Cola Victory ($50)")
 
 			if iButton == iIndex
 				if (Player.GetItemCount rCurrency) < 5
@@ -241,7 +207,7 @@ begin function { int iButton }
 		; Finalize
 
 		let iIndex += 1
-		let VendingMenuText += "|Cancel"
+		let sMenuText += "|Cancel"
 
 		if eval iButton == iIndex
 			if IsFormValid rCloseSound
@@ -250,13 +216,15 @@ begin function { int iButton }
 			return
 		endif
 
-		PrintC "Vending machine presenting dialog with %z." VendingMenuText
-		MessageBoxExAlt vendingMachineActivateUDF (ToString $(VendingMenuText)) ((Player.GetItemCount PrewarMoney) * 10)
+		MessageBoxExAlt vendingMachineActivateUDF (ToString $(sMenuText)) ((Player.GetItemCount PrewarMoney) * 10)
 		return
 	endif
 
-	
 	; TODO: Sunset Sarsaparilla
 	PrintC "Vending machine type not known."
+
+	; Clean-Up
+
+	Sv_Destruct sCurrencyName, sMenuText
 
 end

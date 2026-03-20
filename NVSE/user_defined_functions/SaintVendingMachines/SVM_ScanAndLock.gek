@@ -1,6 +1,4 @@
-ref rEnteredCell
-
-begin Function {rEnteredCell}
+begin Function { ref rEnteredCell }
 
 	; References
 
