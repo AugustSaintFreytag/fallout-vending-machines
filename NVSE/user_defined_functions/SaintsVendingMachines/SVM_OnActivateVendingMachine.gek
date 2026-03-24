@@ -2,7 +2,7 @@ begin function { int iButton }
 
 	; UDFs
 
-	ref vendingMachineActivateUDF = CompileScript ("SaintVendingMachines\SVM_OnActivateVendingMachine.gek")
+	ref vendingMachineActivateUDF = CompileScript ("SaintsVendingMachines\SVM_OnActivateVendingMachine.gek")
 
 	; Init
 
@@ -52,8 +52,11 @@ begin function { int iButton }
 	if eval Player.IsInInterior == 1
 		PrintC "Setting pseudo-random stock for vending machine in interior at %g, %g, %g." machinePosX machinePosY machinePosZ
 
-		if (machinePosX % 9) == 0
-			; Out of Stock
+		if (machinePosY % 15) == 0
+			; Out of stock
+		elseif (machinePosX % 9) == 0
+			bHasBottles = 1
+			bHasNukaCola = 1
 		elseif (machinePosX % 8) == 0
 			; Classic, Quantum, Victory
 			bHasBottles = 1

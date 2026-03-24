@@ -2,8 +2,8 @@ begin Function { ref rEnteredCell }
 
 	; References
 
-	ref GetTimeLastLockedUDF = CompileScript "SaintVendingMachines\SVM_GetTimeLastLocked.gek"
-	ref SetTimeLastLockedUDF = CompileScript "SaintVendingMachines\SVM_SetTimeLastLocked.gek"
+	ref GetTimeLastLockedUDF = CompileScript "SaintsVendingMachines\SVM_GetTimeLastLocked.gek"
+	ref SetTimeLastLockedUDF = CompileScript "SaintsVendingMachines\SVM_SetTimeLastLocked.gek"
 	
 	; Prepare Lock Level
 

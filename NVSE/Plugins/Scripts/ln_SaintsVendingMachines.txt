@@ -8,8 +8,8 @@ short bIsActivationNotPrevented
 
 short iButton = -1
 
-ref vendingMachineActivateUDF = CompileScript "SaintVendingMachines\SVM_OnActivateVendingMachine.gek"
-ref vendingMachineLockScanUDF = CompileScript "SaintVendingMachines\SVM_ScanAndLock.gek"
+ref vendingMachineActivateUDF = CompileScript "SaintsVendingMachines\SVM_OnActivateVendingMachine.gek"
+ref vendingMachineLockScanUDF = CompileScript "SaintsVendingMachines\SVM_ScanAndLock.gek"
 
 ; On Cell Enter
 
