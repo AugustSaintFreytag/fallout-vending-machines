@@ -125,8 +125,8 @@ begin function { int iButton }
 				if (Player.GetItemCount rCurrency) < 1
 					MessageEx "You don't have enough Pre-War Money to make this purchase."
 				else
-					Player.RemoveItem PrewarMoney 1
-					Player.AddItem NukaCola 1
+					Player.RemoveItem PrewarMoney 1 1
+					Player.AddItem NukaCola 1 1
 					PlaySound PHYBottleH 1
 				endif
 				
@@ -148,8 +148,8 @@ begin function { int iButton }
 				if (Player.GetItemCount rCurrency) < 3
 					MessageEx "You don't have enough Pre-War Money to make this purchase."
 				else
-					Player.RemoveItem PrewarMoney 3
-					Player.AddItem MS05NukaColaQtm 1
+					Player.RemoveItem PrewarMoney 3 1
+					Player.AddItem MS05NukaColaQtm 1 1
 					PlaySound PHYBottleH 1
 				endif
 				
@@ -171,8 +171,8 @@ begin function { int iButton }
 				if (Player.GetItemCount rCurrency) < 5
 					MessageEx "You don't have enough Pre-War Money to make this purchase."
 				else
-					Player.RemoveItem PrewarMoney 5
-					Player.AddItem NVNukaColaQuartz 1
+					Player.RemoveItem PrewarMoney 5 1
+					Player.AddItem NVNukaColaQuartz 1 1
 					PlaySound PHYBottleH 1
 				endif
 				
@@ -194,8 +194,8 @@ begin function { int iButton }
 				if (Player.GetItemCount rCurrency) < 5
 					MessageEx "You don't have enough Pre-War Money to make this purchase."
 				else
-					Player.RemoveItem PrewarMoney 5
-					Player.AddItem NVNukaColaVictory 1
+					Player.RemoveItem PrewarMoney 5 1
+					Player.AddItem NVNukaColaVictory 1 1
 					PlaySound PHYBottleH 1
 				endif
 				
