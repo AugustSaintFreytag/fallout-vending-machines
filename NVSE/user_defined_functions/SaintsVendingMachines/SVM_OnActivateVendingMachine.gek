@@ -23,11 +23,8 @@ begin function { int iButton }
 
 	; Sounds
 
-	ref rOpenSound
-	let rOpenSound := GetContainerSound rActivated 0
-	
-	ref rCloseSound
-	let rCloseSound := GetContainerSound rActivated 1
+	ref rOpenSound = GetContainerSound rActivated 0	
+	ref rCloseSound = GetContainerSound rActivated 1
 
 	if IsFormValid rOpenSound
 		PlaySound rOpenSound 1
@@ -106,7 +103,7 @@ begin function { int iButton }
 
 	; Activation
 
-	if eval HasKeyword rActivated "NukaColaVendingMachine"
+	if eval (bHasBottles) && (HasKeyword rActivated "NukaColaVendingMachine")
 		PrintC "Vending machine detected to be Nuka-Cola type."
 
 		if eval rCurrency == PrewarMoney
@@ -133,8 +130,6 @@ begin function { int iButton }
 				if IsFormValid rCloseSound
 					PlaySound rCloseSound 1
 				endif
-
-				return
 			endif
 		endif
 
@@ -156,8 +151,6 @@ begin function { int iButton }
 				if IsFormValid rCloseSound
 					PlaySound rCloseSound 1
 				endif
-
-				return
 			endif
 		endif
 
@@ -179,8 +172,6 @@ begin function { int iButton }
 				if IsFormValid rCloseSound
 					PlaySound rCloseSound 1
 				endif
-
-				return
 			endif
 		endif
 
@@ -202,8 +193,6 @@ begin function { int iButton }
 				if IsFormValid rCloseSound
 					PlaySound rCloseSound 1
 				endif
-
-				return
 			endif
 		endif
 
@@ -216,15 +205,12 @@ begin function { int iButton }
 			if IsFormValid rCloseSound
 				PlaySound rCloseSound 1
 			endif
-			return
 		endif
 
-		MessageBoxExAlt vendingMachineActivateUDF (ToString $(sMenuText)) ((Player.GetItemCount PrewarMoney) * 10)
-		return
+		if eval iButton == -1
+			MessageBoxExAlt vendingMachineActivateUDF (ToString $(sMenuText)) ((Player.GetItemCount PrewarMoney) * 10)
+		endif
 	endif
-
-	; TODO: Sunset Sarsaparilla
-	PrintC "Vending machine type not known."
 
 	; Clean-Up
 
