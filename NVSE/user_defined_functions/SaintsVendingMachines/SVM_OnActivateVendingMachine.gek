@@ -97,8 +97,7 @@ begin function { int iButton }
 
 	if eval bHasBottles == 0
 		PrintC "The vending machine was set to be out of stock."
-		MessageEx "This vending machine is out of stock."
-		return
+		MessageExAlt 2 "Interface\Icons\Message Icons\glow_message_vaultboy_sad.dds|This vending machine is out of stock."
 	endif
 
 	; Activation
@@ -120,7 +119,7 @@ begin function { int iButton }
 
 			if iButton == iIndex
 				if (Player.GetItemCount rCurrency) < 1
-					MessageEx "You don't have enough Pre-War Money to make this purchase."
+					MessageExAlt 2 "Interface\Icons\Message Icons\glow_message_vaultboy_sad.dds|You don't have enough Pre-War Money to make this purchase."
 				else
 					Player.RemoveItem PrewarMoney 1 1
 					Player.AddItem NukaCola 1 1
@@ -141,7 +140,7 @@ begin function { int iButton }
 
 			if iButton == iIndex
 				if (Player.GetItemCount rCurrency) < 3
-					MessageEx "You don't have enough Pre-War Money to make this purchase."
+					MessageExAlt 2 "Interface\Icons\Message Icons\glow_message_vaultboy_sad.dds|You don't have enough Pre-War Money to make this purchase."
 				else
 					Player.RemoveItem PrewarMoney 3 1
 					Player.AddItem MS05NukaColaQtm 1 1
@@ -162,7 +161,7 @@ begin function { int iButton }
 
 			if iButton == iIndex
 				if (Player.GetItemCount rCurrency) < 5
-					MessageEx "You don't have enough Pre-War Money to make this purchase."
+					MessageExAlt 2 "Interface\Icons\Message Icons\glow_message_vaultboy_sad.dds|You don't have enough Pre-War Money to make this purchase."
 				else
 					Player.RemoveItem PrewarMoney 5 1
 					Player.AddItem NVNukaColaQuartz 1 1
@@ -183,7 +182,7 @@ begin function { int iButton }
 
 			if iButton == iIndex
 				if (Player.GetItemCount rCurrency) < 5
-					MessageEx "You don't have enough Pre-War Money to make this purchase."
+					MessageExAlt 2 "Interface\Icons\Message Icons\glow_message_vaultboy_sad.dds|You don't have enough Pre-War Money to make this purchase."
 				else
 					Player.RemoveItem PrewarMoney 5 1
 					Player.AddItem NVNukaColaVictory 1 1
