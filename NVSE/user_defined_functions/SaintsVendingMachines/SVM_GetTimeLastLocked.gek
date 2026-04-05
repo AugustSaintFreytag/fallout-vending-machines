@@ -5,12 +5,11 @@ begin Function { ref rObject }
 
 	float fTimeLastLocked = AuxVarGetFlt sKey
 
-	PrintC "Retrieved time last locked for machine '%z' (key '%z') with %.2f day(s)." sRefId sKey fTimeLastLocked
+	; PrintC "Retrieved time last locked for machine '%z' (key '%z') with %.2f day(s)." sRefId sKey fTimeLastLocked
 	SetFunctionValue fTimeLastLocked
 
 	; Clean-Up
 
-	Sv_Destruct sRefId
-	Sv_Destruct sKey
+	Sv_Destruct sRefId, sKey
 	
 end

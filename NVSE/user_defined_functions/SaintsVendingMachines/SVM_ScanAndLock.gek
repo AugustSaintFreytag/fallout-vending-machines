@@ -42,13 +42,13 @@ begin Function { ref rEnteredCell }
 		
 		if currentReference.GetLocked == 0
 			if (daysPassed - timeLastLocked) > 0.75
-				PrintC "Locking vending machine '%z' with lock level %g." referenceId lockLevel
+				; PrintC "Locking vending machine '%z' with lock level %g." referenceId lockLevel
 				currentReference.Lock lockLevel
 			else
-				PrintC "Did not lock vending machine '%z', already locked recently (days passed %.2f, time last locked %.2f)." referenceId daysPassed timeLastLocked
+				; PrintC "Did not lock vending machine '%z', already locked recently (days passed %.2f, time last locked %.2f)." referenceId daysPassed timeLastLocked
 			endif
 		else
-			PrintC "Skipping already locked vending machine '%z'." referenceId
+			; PrintC "Skipping already locked vending machine '%z'." referenceId
 		endif
 
 		; Either reference was locked or was already locked, always renew timer.
