@@ -5,9 +5,9 @@ begin Function { ref rObject }
 
 	float fTimeLastLocked = GetGameDaysPassed 2277 08 17
 	
-	AuxVarSetFlt sKey fTimeLastLocked
+	AuxVarSetFlt ($sKey) fTimeLastLocked
 
-	; PrintC "Setting time last locked for machine '%z' (key '%z') to %.2f day(s)." sRefId sKey fTimeLastLocked
+	PrintC "Setting time last locked for machine '%z' (key '%z') to %.2f day(s)." sRefId sKey fTimeLastLocked
 
 	; Clean-Up
 
