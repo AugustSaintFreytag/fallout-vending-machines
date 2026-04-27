@@ -1,0 +1,21 @@
+begin Function { short iSeed }
+
+    short iBound = 4091  ; prime, keeps all products safely below 2^24
+
+    ; Normalize input - handles negative values
+    short iHash = iSeed % iBound
+
+    if iHash < 0
+        iHash += iBound
+    endif
+
+    ; Two rounds of LCG + one XOR fold for non-linearity
+    let iHash := (iHash * 1931 + 937) % iBound
+    let iHash := LogicalXor iHash ((iHash * 7) % iBound)
+    let iHash := (iHash * 1931 + 937) % iBound
+
+    short iChance = iHash * 101 / iBound
+
+    SetFunctionValue iChance
+
+end
