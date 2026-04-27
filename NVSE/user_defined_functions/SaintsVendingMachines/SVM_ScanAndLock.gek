@@ -41,7 +41,7 @@ begin Function { ref rEnteredCell }
 		let timeLastLocked := Call GetTimeLastLockedUDF currentReference
 		
 		if currentReference.GetLocked == 0
-			if (daysPassed - timeLastLocked) > 0.75
+			if (daysPassed - timeLastLocked) > 3.0
 				; PrintC "Locking vending machine '%z' with lock level %g." referenceId lockLevel
 				currentReference.Lock lockLevel
 			else
