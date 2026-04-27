@@ -97,7 +97,7 @@ begin function { int iButton }
 					MessageExAlt 2 "Interface\Icons\Message Icons\glow_message_vaultboy_sad.dds|You don't have enough Pre-War Money to make this purchase."
 				else
 					Player.RemoveItem PrewarMoney 1 1
-					Player.AddItem NukaCola 1 1
+					Player.AddItem NukaCola 1
 					PlaySound PHYBottleH 1
 				endif
 				
@@ -118,7 +118,7 @@ begin function { int iButton }
 					MessageExAlt 2 "Interface\Icons\Message Icons\glow_message_vaultboy_sad.dds|You don't have enough Pre-War Money to make this purchase."
 				else
 					Player.RemoveItem PrewarMoney 3 1
-					Player.AddItem MS05NukaColaQtm 1 1
+					Player.AddItem MS05NukaColaQtm 1
 					PlaySound PHYBottleH 1
 				endif
 				
@@ -139,7 +139,7 @@ begin function { int iButton }
 					MessageExAlt 2 "Interface\Icons\Message Icons\glow_message_vaultboy_sad.dds|You don't have enough Pre-War Money to make this purchase."
 				else
 					Player.RemoveItem PrewarMoney 5 1
-					Player.AddItem NVNukaColaQuartz 1 1
+					Player.AddItem NVNukaColaQuartz 1
 					PlaySound PHYBottleH 1
 				endif
 				
@@ -160,7 +160,7 @@ begin function { int iButton }
 					MessageExAlt 2 "Interface\Icons\Message Icons\glow_message_vaultboy_sad.dds|You don't have enough Pre-War Money to make this purchase."
 				else
 					Player.RemoveItem PrewarMoney 5 1
-					Player.AddItem NVNukaColaVictory 1 1
+					Player.AddItem NVNukaColaVictory 1
 					PlaySound PHYBottleH 1
 				endif
 				
