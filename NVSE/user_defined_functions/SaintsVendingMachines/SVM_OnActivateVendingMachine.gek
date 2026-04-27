@@ -2,7 +2,8 @@ begin function { int iButton }
 
 	; UDFs
 
-	ref vendingMachineActivateUDF = CompileScript ("SaintsVendingMachines\SVM_OnActivateVendingMachine.gek")
+	ref VendingMachineActivateUDF = CompileScript ("SaintsVendingMachines\SVM_OnActivateVendingMachine.gek")
+	ref GetSeededRandomChanceUDF = CompileScript ("SaintsVendingMachines\SVM_GetSeededRandomChance.gek")
 
 	; Init
 
@@ -30,9 +31,11 @@ begin function { int iButton }
 		PlaySound rOpenSound 1
 	endif
 
-	short machinePosX = rActivated.GetPos X
-	short machinePosY = rActivated.GetPos Y
-	short machinePosZ = rActivated.GetPos Z
+	short iMachinePosX = rActivated.GetPos X
+	short iMachinePosY = rActivated.GetPos Y
+	short iMachinePosZ = rActivated.GetPos Z
+
+	short iMachineSeed = iMachinePosX + iMachinePosY - iMachinePosZ
 
 	; Vending
 
@@ -47,51 +50,23 @@ begin function { int iButton }
 	; Stock Pseudo-Randomization
 
 	if eval Player.IsInInterior == 1
-		PrintC "Setting pseudo-random stock for vending machine in interior at %g, %g, %g." machinePosX machinePosY machinePosZ
+		let bHasNukaCola := (Call GetSeededRandomChanceUDF iMachineSeed) < 70
+		let bHasNukaColaQuantum := (Call GetSeededRandomChanceUDF (iMachineSeed + 1)) < 50
+		let bHasNukaColaQuartz := (Call GetSeededRandomChanceUDF (iMachineSeed + 2)) < 10
+		let bHasNukaColaVictory := (Call GetSeededRandomChanceUDF (iMachineSeed + 3)) < 5
 
-		if (machinePosY % 15) == 0
-			; Out of stock
-		elseif (machinePosX % 9) == 0
-			bHasBottles = 1
-			bHasNukaCola = 1
-		elseif (machinePosX % 8) == 0
-			; Classic, Quantum, Victory
-			bHasBottles = 1
-			bHasNukaColaQuartz = 1	
-		elseif (machinePosX % 7) == 0
-			; Classic, Quantum, Victory
-			bHasBottles = 1
-			bHasNukaCola = 1
-			bHasNukaColaQuantum = 1
-			bHasNukaColaVictory = 1
-		elseif (machinePosX % 5) == 0
-			; Victory Only
-			bHasBottles = 1
-			bHasNukaCola = 1
-			bHasNukaColaQuantum = 1
-			bHasNukaColaQuartz = 1
-		elseif (machinePosX % 6) == 0
-			; Classic, Quantum, Quartz
-			bHasBottles = 1
-			bHasNukaColaVictory = 1
-		elseif (machinePosX % 4) == 0
-			; Classic, Quantum
-			bHasBottles = 1
-			bHasNukaCola = 1
-			bHasNukaColaQuantum = 1
-		endif
+		let bHasBottles := eval (bHasNukaCola || bHasNukaColaQuantum || bHasNukaColaQuartz || bHasNukaColaVictory)
 	else
-		PrintC "Setting pseudo-random stock for vending machine in exterior at %g, %g, %g." machinePosX machinePosY machinePosZ
+		let bHasNukaCola := (Call GetSeededRandomChanceUDF iMachineSeed) < 50
+		let bHasNukaColaQuantum := (Call GetSeededRandomChanceUDF iMachineSeed + 1) < 20
+		let bHasNukaColaQuartz := (Call GetSeededRandomChanceUDF iMachineSeed + 2) < 0
+		let bHasNukaColaVictory := (Call GetSeededRandomChanceUDF iMachineSeed + 3) < 0
 
-		if (machinePosX % 2) == 1
-			bHasBottles = 1
-			bHasNukaCola = 1
-			bHasNukaColaQuantum = 1
-		else
-			bHasBottles = 1
-			bHasNukaCola = 1
-		endif
+		let bHasBottles := eval (bHasNukaCola || bHasNukaColaQuantum || bHasNukaColaQuartz || bHasNukaColaVictory)
 	endif
+
+	short iSampleValue = Call GetSeededRandomChanceUDF (iMachineSeed + 4)
+	PrintC "Set vending machine stock: Classic (%g), Quantum (%g), Quartz (%g), Victory (%g)." bHasNukaCola bHasNukaColaQuantum bHasNukaColaQuartz bHasNukaColaVictory
 
 	; Stock Check
 
@@ -207,7 +182,7 @@ begin function { int iButton }
 		endif
 
 		if eval iButton == -1
-			MessageBoxExAlt vendingMachineActivateUDF (ToString $(sMenuText)) ((Player.GetItemCount PrewarMoney) * 10)
+			MessageBoxExAlt VendingMachineActivateUDF (ToString $(sMenuText)) ((Player.GetItemCount PrewarMoney) * 10)
 		endif
 	endif
 
