@@ -8,20 +8,20 @@ short bIsActivationNotPrevented
 
 short iButton = -1
 
-ref vendingMachineActivateUDF = CompileScript "SaintsVendingMachines\SVM_OnActivateVendingMachine.gek"
-ref vendingMachineLockScanUDF = CompileScript "SaintsVendingMachines\SVM_ScanAndLock.gek"
+ref VendingMachineActivateUDF = CompileScript "SaintsVendingMachines\SVM_OnActivateVendingMachine.gek"
+ref VendingMachineLockScanUDF = CompileScript "SaintsVendingMachines\SVM_ScanAndLock.gek"
 
 ; On Cell Enter
 
 SetEventHandler "OnCellEnter" (begin function { ref rEnteredCell }
-	Call vendingMachineLockScanUDF rEnteredCell
+	Call VendingMachineLockScanUDF rEnteredCell
 end)
 
 ; Post Load Game
 
 SetEventHandler "PostLoadGame" (begin function { short iLoad }
 	if iLoad
-		Call vendingMachineLockScanUDF PlayerREF.GetParentCell
+		Call VendingMachineLockScanUDF PlayerREF.GetParentCell
 	endif
 end)
 
@@ -36,6 +36,6 @@ SetEventHandlerAlt "ShowOff:OnPreActivate" (begin function { rActivator, bIsActi
 		endif
 
 		SetFunctionValue 0
-		Call vendingMachineActivateUDF iButton
+		Call VendingMachineActivateUDF iButton
 	endif
 end) 1::Player
