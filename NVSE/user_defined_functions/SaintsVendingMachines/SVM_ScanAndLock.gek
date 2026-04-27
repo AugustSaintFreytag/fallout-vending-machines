@@ -19,7 +19,7 @@ begin Function { ref rEnteredCell }
 	float timeLastLocked
 
 	float daysPassed = GetGameDaysPassed 2277 08 17
-	array_var loadedReferences = PlayerREF.GetRefs 0 1 1
+	array_var loadedReferences = PlayerREF.GetRefs 27 1 1
 	
 	string_var referenceId
 	short referenceIndex = 0
