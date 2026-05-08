@@ -1,15 +1,8 @@
 begin Function { ref rObject }
 
-	string_var sRefId = GetFormIDString rObject
-	string_var sKey = Sv_Construct "*SVM_TimeLastLocked_%z" sRefId
+	float fTimeLastLocked = RefMapArrayGetFloat "*SVM_TimeLastLocked" rObject
+	PrintC "Getting time last locked for machine '%z' to %.2f day(s)." (GetFormIDString rObject) fTimeLastLocked
 
-	float fTimeLastLocked = AuxVarGetFlt ($sKey)
-
-	; PrintC "Retrieved time last locked for machine '%z' (key '%z') with %.2f day(s)." sRefId sKey fTimeLastLocked
 	SetFunctionValue fTimeLastLocked
-
-	; Clean-Up
-
-	Sv_Destruct sRefId, sKey
 	
 end
