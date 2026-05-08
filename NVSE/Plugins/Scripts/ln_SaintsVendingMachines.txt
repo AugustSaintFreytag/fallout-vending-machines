@@ -1,41 +1,37 @@
-ref rEnteredCell
-short iLoad
+; UDFs
 
-ref rActivator
-ref rActivated
+ref OnActivateUDF = CompileScript "SaintsVendingMachines\SVM_OnActivate.gek"
+ref ScanAndLockUDF = CompileScript "SaintsVendingMachines\SVM_ScanAndLock.gek"
 
-short bIsActivationNotPrevented
-
-short iButton = -1
-
-ref VendingMachineActivateUDF = CompileScript "SaintsVendingMachines\SVM_OnActivateVendingMachine.gek"
-ref VendingMachineLockScanUDF = CompileScript "SaintsVendingMachines\SVM_ScanAndLock.gek"
-
-; On Cell Enter
+; Cell Enter Event
 
 SetEventHandler "OnCellEnter" (begin function { ref rEnteredCell }
-	Call VendingMachineLockScanUDF rEnteredCell
+	Call ScanAndLockUDF rEnteredCell
 end)
 
-; Post Load Game
+; Post Load Game Event
 
-SetEventHandler "PostLoadGame" (begin function { short iLoad }
-	if iLoad
-		Call VendingMachineLockScanUDF PlayerREF.GetParentCell
+SetEventHandler "PostLoadGame" (begin function { short bSuccessfullyLoaded }
+	if eval !bSuccessfullyLoaded
+		return
 	endif
+
+	Call ScanAndLockUDF Player.GetParentCell
 end)
 
-; Activate
+; Activate Event
 
-SetEventHandlerAlt "ShowOff:OnPreActivate" (begin function { rActivator, bIsActivationNotPrevented }
-	let rActivated := GetSelfAlt
+SetEventHandlerAlt "ShowOff:OnPreActivate" (begin function { ref rActivator, short bIsActivationNotPrevented }
+	ref rActivated = GetSelfAlt
 
-	if eval HasKeyword rActivated "NukaColaVendingMachine" || HasKeyword rActivated "SunsetSarsaparillaVendingMachine"
+	; Can be expanded to check for `HasKeyword rActivated "SunsetSarsaparillaVendingMachine"` in the future.
+
+	if eval HasKeyword rActivated "NukaColaVendingMachine"
 		if eval player.IsSneaking == 1
 			return
 		endif
 
 		SetFunctionValue 0
-		Call VendingMachineActivateUDF iButton
+		Call OnActivateUDF rActivated
 	endif
 end) 1::Player

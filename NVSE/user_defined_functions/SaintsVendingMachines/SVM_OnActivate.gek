@@ -1,0 +1,81 @@
+begin function { ref rObject }
+
+	; UDFs
+
+	ref OnMenuConfirmUDF = CompileScript "SaintsVendingMachines\SVM_OnMenuConfirm.gek"
+	ref GetSeededRandomChanceUDF = CompileScript "SaintsVendingMachines\SVM_GetSeededRandomChance.gek"
+
+	ref GetProductsUDF = CompileScript "SaintsVendingMachines\SVM_GetProducts.gek"
+	ref GetStockUDF = CompileScript "SaintsVendingMachines\SVM_GetStock.gek"
+	ref GetPricesUDF = CompileScript "SaintsVendingMachines\SVM_GetPrices.gek"
+
+	; Init
+
+	if eval rObject == 0
+		return
+	endif
+
+	; Stock
+
+	array_var aProducts = (Call GetProductsUDF)
+	array_var aStockByProduct = (Call GetStockUDF rObject)
+	array_var aPriceByProduct = (Call GetPricesUDF)
+	array_var aProductIndices = Ar_Construct "array"
+
+	; Run
+
+	if eval aStockByProduct["_HasStock"]
+		; Alternative text for bottle caps:
+		; "This vending machine has been modified to accept contemporary currency.%rYou have %g Bottle Caps in your inventory."
+		string_var sMenuText = "This vending machine accepts legal US tender.%rYou have $%g in your inventory."
+		
+		foreach array_var aEntry <- aProducts
+			short iIndex = aEntry["key"]
+			string_var sProduct = aEntry["value"]
+			short iStock = aStockByProduct[$sProduct]
+			short iPrice = aPriceByProduct[$sProduct]
+
+			if iStock > 0
+				string_var sLine = Sv_Construct "|%z ($%g)" ($sProduct) (iPrice * 10)
+				let sMenuText += sLine
+
+				Ar_Append aProductIndices iIndex
+				Sv_Destruct sLine
+			endif
+
+			Sv_Destruct sProduct
+		loop
+
+		; Finalize
+
+		let sMenuText += "|Cancel"
+
+		; Sounds
+
+		ref rOpenSound = GetContainerSound rObject 0
+
+		if eval IsFormValid rOpenSound
+			rObject.PlaySound rOpenSound 1
+		endif
+
+		; Message
+
+		Player.AuxiliaryVariableSetRef "*SVM_aLastVendingMachine" rObject
+		Player.AuxiliaryVariableSetFromArray "*SVM_aLastProductIndices" aProductIndices
+	
+		short iPlayerCurrency = Player.GetItemCount PrewarMoney
+		MessageBoxExAlt OnMenuConfirmUDF ($sMenuText) (iPlayerCurrency * 10)
+	else
+		MessageExAlt 2 "Interface\Icons\Message Icons\glow_message_vaultboy_sad.dds|This vending machine is out of stock."
+	endif
+
+	; Clean-Up
+
+	Sv_Destruct sMenuText
+
+	let aProducts := Ar_Null
+	let aStockByProduct := Ar_Null
+	let aPriceByProduct := Ar_Null
+	let aProductIndices := Ar_Null
+
+end
