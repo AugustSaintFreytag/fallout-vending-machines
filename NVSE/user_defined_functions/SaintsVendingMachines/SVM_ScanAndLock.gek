@@ -5,61 +5,54 @@ begin Function { ref rEnteredCell }
 	ref GetTimeLastLockedUDF = CompileScript "SaintsVendingMachines\SVM_GetTimeLastLocked.gek"
 	ref SetTimeLastLockedUDF = CompileScript "SaintsVendingMachines\SVM_SetTimeLastLocked.gek"
 	
-	; Prepare Lock Level
+	; Lock Level
 
-	short luckBase = (PlayerREF.GetActorValue Luck) - 3
-	short luckBonus = GetMinOf 0 luckBase
-	short lockLevelMax = 8 - luckBonus
-	short lockLevelMaxRandom = Rand 0, lockLevelMax
-	short lockLevel = 5 + 5 * lockLevelMaxRandom
+	short iLuckBase = (Player.GetActorValue Luck) - 3
+	short iLuckBonus = GetMaxOf 0 iLuckBase
+	short iLockLevelMax = 8 - iLuckBonus
+	short iLockLevelMaxRandom = Rand 0, iLockLevelMax
+	short iLockLevel = 5 + 5 * iLockLevelMaxRandom
 
-	; --- Scan loaded references and lock vending machines ---
+	; Scan
 
-	ref currentReference
-	float timeLastLocked
-
-	float daysPassed = GetGameDaysPassed 2277 08 17
-	array_var loadedReferences = PlayerREF.GetRefs 27 1 1
+	float fDaysPassed = GetGameDaysPassed 2277 08 17
+	array_var aLoadedReferences = Player.GetRefs 27 1 1
 	
-	string_var referenceId
-	short referenceIndex = 0
+	short iReferenceIndex = 0
 
-	while referenceIndex < Ar_Size loadedReferences
-		let currentReference := loadedReferences[referenceIndex]
+	while iReferenceIndex < Ar_Size aLoadedReferences
+		ref rObject = aLoadedReferences[iReferenceIndex]
 
-		if currentReference == 0
-			let referenceIndex += 1
+		if eval (!rObject)
+			let iReferenceIndex += 1
 			continue
 		endif
 
-		if (HasKeyword currentReference "NukaColaVendingMachine") == 0
-			let referenceIndex += 1
+		if eval !(HasKeyword rObject "NukaColaVendingMachine")
+			let iReferenceIndex += 1
 			continue
 		endif
 
-		let referenceId := GetFormIDString currentReference
-		let timeLastLocked := Call GetTimeLastLockedUDF currentReference
+		float fTimeLastLocked = (Call GetTimeLastLockedUDF rObject)
 		
-		if currentReference.GetLocked == 0
-			if (daysPassed - timeLastLocked) > 3.0
-				; PrintC "Locking vending machine '%z' with lock level %g." referenceId lockLevel
-				currentReference.Lock lockLevel
+		if rObject.GetLocked == 0
+			if (fDaysPassed - fTimeLastLocked) > 3.0
+				PrintC "Locking vending machine '%z' with lock level %g." (GetFormIDString rObject) iLockLevel
+				rObject.Lock iLockLevel
 			else
-				; PrintC "Did not lock vending machine '%z', already locked recently (days passed %.2f, time last locked %.2f)." referenceId daysPassed timeLastLocked
+				PrintC "Did not lock vending machine '%z', already locked recently (days passed %.2f, time last locked %.2f)." (GetFormIDString rObject) fDaysPassed fTimeLastLocked
 			endif
 		else
-			; PrintC "Skipping already locked vending machine '%z'." referenceId
+			PrintC "Skipping already locked vending machine '%z'." (GetFormIDString rObject)
 		endif
 
 		; Either reference was locked or was already locked, always renew timer.
-		Call SetTimeLastLockedUDF currentReference
-		let referenceIndex += 1
+		Call SetTimeLastLockedUDF rObject
+		let iReferenceIndex += 1
 	loop
 
 	; Clean-Up
 
-	Sv_Destruct referenceId
-
-	let loadedReferences := Ar_Null
+	let aLoadedReferences := Ar_Null
 
 end

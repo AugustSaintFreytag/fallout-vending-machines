@@ -1,9 +1,9 @@
 begin Function { short iSeed }
 
-    short iBound = 4091  ; prime, keeps all products safely below 2^24
+    float iBound = 4091  ; prime, keeps all products safely below 2^24
 
     ; Normalize input - handles negative values
-    short iHash = iSeed % iBound
+    float iHash = iSeed % iBound
 
     if iHash < 0
         iHash += iBound

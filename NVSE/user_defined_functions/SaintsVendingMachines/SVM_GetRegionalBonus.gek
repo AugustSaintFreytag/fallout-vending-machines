@@ -1,0 +1,16 @@
+begin function {}
+	
+	; Can return a regional chance bonus between 0 and 100.
+	; Returning 100 will have the vending machine stock all possible products.
+	; Returning 0 will not alter the stock from baseline procedural generation.
+
+	string_var sRegionName = (GetEditorID Player.GetParentWorldspace)
+
+	if sRegionName == "MegatonWorld"
+		SetFunctionValue 40
+		return
+	endif
+
+	SetFunctionValue 0
+
+end

@@ -1,0 +1,6 @@
+begin function {}
+
+	array_var aProducts = Ar_List "Nuka-Cola", "Nuka-Cola Quantum", "Nuka-Cola Quartz", "Nuka-Cola Victory"
+	SetFunctionValue aProducts
+	
+end

@@ -1,0 +1,73 @@
+begin function { ref rObject }
+
+	; UDFs
+
+	ref GetObjectSeedUDF = CompileScript "SaintsVendingMachines\SVM_GetObjectSeed.gek"
+	ref GetSeededRandomChanceUDF = CompileScript "SaintsVendingMachines\SVM_GetSeededRandomChance.gek"
+	ref GetRegionalBonusUDF = CompileScript "SaintsVendingMachines\SVM_GetRegionalBonus.gek"
+	
+	; Factors
+
+	float fStockFactor = 1.0
+
+	short iStockBonus = (Call GetRegionalFactorUDF)
+
+	; Random
+
+	short iMachineSeed = (Call GetObjectSeedUDF rObject)
+	short iMachineSeedTick = 0
+
+	ref GetRandomChanceUDF = (begin function {} 
+		short iLocalSeed = iMachineSeed + iMachineSeedTick
+		short iChance = (Call GetSeededRandomChanceUDF iLocalSeed)
+
+		let iChance *= (1 + (1 - fStockFactor))
+		let iChance -= iStockBonus
+
+		PrintC "Returning random chance with seed %g, tick %g, result %g." iLocalSeed iMachineSeedTick iChance
+
+		SetFunctionValue iChance
+		let iMachineSeedTick := iMachineSeedTick + 1`
+	end)
+
+	; Vending
+
+	short bHasStock = 0
+	short iStockNukaCola = 0
+	short iStockNukaColaQuantum = 0
+	short iStockNukaColaQuartz = 0
+	short iStockNukaColaVictory = 0
+
+	; Stock Pseudo-Randomization
+
+	if eval Player.IsInInterior == 1
+		let iStockNukaCola := (Call GetRandomChanceUDF) < 70
+		let iStockNukaColaQuantum := (Call GetRandomChanceUDF) < 50
+		let iStockNukaColaQuartz := (Call GetRandomChanceUDF) < 10
+		let iStockNukaColaVictory := (Call GetRandomChanceUDF) < 5
+
+		let bHasStock := eval (iStockNukaCola || iStockNukaColaQuantum || iStockNukaColaQuartz || iStockNukaColaVictory)
+	else
+		let iStockNukaCola := (Call GetRandomChanceUDF) < 50
+		let iStockNukaColaQuantum := (Call GetRandomChanceUDF) < 20
+		let iStockNukaColaQuartz := (Call GetRandomChanceUDF) < 0
+		let iStockNukaColaVictory := (Call GetRandomChanceUDF) < 0
+
+		let bHasStock := eval (iStockNukaCola || iStockNukaColaQuantum || iStockNukaColaQuartz || iStockNukaColaVictory)
+	endif
+
+	PrintC "Set vending machine stock: Classic (%g), Quantum (%g), Quartz (%g), Victory (%g)." iStockNukaCola iStockNukaColaQuantum iStockNukaColaQuartz iStockNukaColaVictory
+
+	; Return
+
+	array_var aStockByProduct = Ar_Construct "stringmap"
+
+	let aStockByProduct["_HasStock"] := bHasStock
+	let aStockByProduct["Nuka-Cola"] := iStockNukaCola
+	let aStockByProduct["Nuka-Cola Quantum"] := iStockNukaColaQuantum
+	let aStockByProduct["Nuka-Cola Quartz"] := iStockNukaColaQuartz
+	let aStockByProduct["Nuka-Cola Victory"] := iStockNukaColaVictory
+
+	SetFunctionValue aStockByProduct
+
+end

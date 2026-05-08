@@ -1,0 +1,94 @@
+begin function { short iSparseIndex }
+
+	; UDFs
+
+	ref GetPricesUDF = CompileScript "SaintsVendingMachines\SVM_GetPrices.gek"
+
+	; UDFs (Local)
+
+	ref PlayCloseSoundUDF = (begin function { ref rObject } 
+		ref rCloseSound = GetContainerSound rObject 1
+
+		if IsFormValid rCloseSound
+			rObject.PlaySound rCloseSound 1
+		endif
+	end)
+
+	ref PurchaseProductUDF = (begin function { ref rItem, short iPrice } 
+		Player.RemoveItem PrewarMoney iPrice 1
+		Player.AddItem rItem 1
+		Player.PlaySound PHYBottleH 1
+	end)
+
+	ref TryPurchaseProductUDF = (begin function { ref rItem, short iPrice } 
+		short iPlayerCurrency = Player.GetItemCount PrewarMoney
+
+		if eval iPlayerCurrency < iPrice
+			MessageExAlt 2 "Interface\Icons\Message Icons\glow_message_vaultboy_sad.dds|You don't have enough Pre-War Money to make this purchase."
+			return
+		endif
+
+		Call PurchaseProductUDF rItem iPrice
+	end)
+
+	; References
+
+	ref rObject = Player.AuxiliaryVariableGetRef "*SVM_aLastVendingMachine"
+
+	if eval rObject == 0
+		PrintC "Could not process vending machine purchase, missing object reference."
+		return
+	endif
+
+	array_var aLastProductIndices = Player.AuxiliaryVariableGetAsArray "*SVM_aLastProductIndices"
+
+	if eval (!aLastProductIndices) || (Ar_Size aLastProductIndices) == 0
+		PrintC "Could not process vending machine purchase, missing last product indices."
+		return
+	endif
+	
+	short iIndex = -1
+
+	if eval (iSparseIndex > -1) && (iSparseIndex < (Ar_Size aLastProductIndices))
+		let iIndex := aLastProductIndices[iSparseIndex]
+	endif
+
+	; Item & Price
+
+	array_var aPriceByProduct = (Call GetPricesUDF)
+
+	ref rItem = 0
+	short iPrice = 0
+
+	if iIndex == 0
+		let rItem := NukaCola
+		let iPrice := aPriceByProduct["Nuka-Cola"]
+	elseif iIndex == 1
+		let rItem := MS05NukaColaQtm
+		let iPrice := aPriceByProduct["Nuka-Cola Quantum"]
+	elseif iIndex == 2
+		let rItem := NVNukaColaQuartz
+		let iPrice := aPriceByProduct["Nuka-Cola Quartz"]
+	elseif iIndex == 3
+		let rItem := NVNukaColaVictory
+		let iPrice := aPriceByProduct["Nuka-Cola Victory"]
+	endif
+
+	; Run
+
+	if eval (rItem != 0) && (iPrice > 0)
+		PrintC "Processing purchase for '%z', incoming index %g, product index %g, product '%z', price %g." (GetFormIDString rObject) iSparseIndex iIndex (GetName rItem) iPrice
+		Call TryPurchaseProductUDF rItem iPrice
+		Call PlayCloseSoundUDF rObject
+	else
+		PrintC "Canceling purchase for '%z', incoming index %g, product index %g." (GetFormIDString rObject) iSparseIndex iIndex
+	endif
+
+	; Clean-Up
+
+	let aPriceByProduct := Ar_Null
+	let aLastProductIndices := Ar_Null
+	let rObject := 0
+	let rItem := 0
+
+end

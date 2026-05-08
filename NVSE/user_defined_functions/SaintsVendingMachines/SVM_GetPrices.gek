@@ -1,0 +1,14 @@
+begin function {}
+
+	; One pre-war money item represents $10.
+
+	array_var aPriceByProduct = Ar_Construct "stringmap"
+
+	let aPriceByProduct["Nuka-Cola"] := 1
+	let aPriceByProduct["Nuka-Cola Quantum"] := 3
+	let aPriceByProduct["Nuka-Cola Quartz"] := 5
+	let aPriceByProduct["Nuka-Cola Victory"] := 6
+
+	SetFunctionValue aPriceByProduct
+
+end

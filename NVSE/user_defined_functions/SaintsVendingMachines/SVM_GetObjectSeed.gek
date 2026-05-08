@@ -1,0 +1,11 @@
+begin function { ref rObject }
+
+	short iMachinePosX = rObject.GetPos X
+	short iMachinePosY = rObject.GetPos Y
+	short iMachinePosZ = rObject.GetPos Z
+
+	short iMachineSeed = iMachinePosX + iMachinePosY - iMachinePosZ
+
+	SetFunctionValue iMachineSeed
+
+end
