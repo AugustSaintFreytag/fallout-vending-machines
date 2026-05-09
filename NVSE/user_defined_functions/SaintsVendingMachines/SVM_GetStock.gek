@@ -10,7 +10,7 @@ begin function { ref rObject }
 
 	float fStockFactor = 1.0
 
-	short iStockBonus = (Call GetRegionalFactorUDF)
+	short iStockBonus = (Call GetRegionalBonusUDF)
 
 	; Random
 
