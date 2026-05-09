@@ -32,14 +32,16 @@ begin function { ref rObject }
 	short bHasStockNukaColaQuartz = 0
 	short bHasStockNukaColaVictory = 0
 
-	; Stock Pseudo-Randomization
+	; Stock
 
 	if eval Player.IsInInterior == 1
+		; Interior Stock
 		let bHasStockNukaCola := (Call GetRandomChanceUDF) < 70
 		let bHasStockNukaColaQuantum := (Call GetRandomChanceUDF) < 50
 		let bHasStockNukaColaQuartz := (Call GetRandomChanceUDF) < 10
 		let bHasStockNukaColaVictory := (Call GetRandomChanceUDF) < 5
 	else
+		; Exterior Stock
 		let bHasStockNukaCola := (Call GetRandomChanceUDF) < 50
 		let bHasStockNukaColaQuantum := (Call GetRandomChanceUDF) < 20
 	endif
