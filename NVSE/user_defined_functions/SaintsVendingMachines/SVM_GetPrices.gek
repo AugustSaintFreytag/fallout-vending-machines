@@ -8,6 +8,8 @@ begin function {}
 	let aPriceByProduct["Nuka-Cola Quantum"] := 3
 	let aPriceByProduct["Nuka-Cola Quartz"] := 5
 	let aPriceByProduct["Nuka-Cola Victory"] := 6
+	let aPriceByProduct["Ice Cold Nuka-Cola"] := 2
+	let aPriceByProduct["Rum and Nuka"] := 2
 
 	SetFunctionValue aPriceByProduct
 
