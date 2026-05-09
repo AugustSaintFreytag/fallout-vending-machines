@@ -5,11 +5,6 @@ begin function { ref rObject }
 	ref GetObjectSeedUDF = CompileScript "SaintsVendingMachines\SVM_GetObjectSeed.gek"
 	ref GetSeededRandomChanceUDF = CompileScript "SaintsVendingMachines\SVM_GetSeededRandomChance.gek"
 	ref GetRegionalBonusUDF = CompileScript "SaintsVendingMachines\SVM_GetRegionalBonus.gek"
-	
-	; Factors
-
-	float fStockFactor = 1.0
-	short iStockBonus = (Call GetRegionalBonusUDF)
 
 	; Random
 
@@ -23,10 +18,10 @@ begin function { ref rObject }
 		let iChance *= (1 + (1 - fStockFactor))
 		let iChance -= iStockBonus
 
-		PrintC "Returning random chance with seed %g, tick %g, result %g." iLocalSeed iMachineSeedTick iChance
+		; PrintC "Returning random chance with seed %g, tick %g, result %g." iLocalSeed iMachineSeedTick iChance
 
 		SetFunctionValue iChance
-		let iMachineSeedTick := iMachineSeedTick + 1`
+		let iMachineSeedTick := iMachineSeedTick + 1
 	end)
 
 	; Vending
@@ -47,13 +42,11 @@ begin function { ref rObject }
 	else
 		let bHasStockNukaCola := (Call GetRandomChanceUDF) < 50
 		let bHasStockNukaColaQuantum := (Call GetRandomChanceUDF) < 20
-		let bHasStockNukaColaQuartz := (Call GetRandomChanceUDF) < 0
-		let bHasStockNukaColaVictory := (Call GetRandomChanceUDF) < 0
 	endif
 
 	let bHasAnyStock := eval (bHasStockNukaCola || bHasStockNukaColaQuantum || bHasStockNukaColaQuartz || bHasStockNukaColaVictory)
 
-	PrintC "Set vending machine stock: Classic (%g), Quantum (%g), Quartz (%g), Victory (%g)." bHasStockNukaCola bHasStockNukaColaQuantum bHasStockNukaColaQuartz bHasStockNukaColaVictory
+	; PrintC "Set vending machine stock: Classic (%g), Quantum (%g), Quartz (%g), Victory (%g)." bHasStockNukaCola bHasStockNukaColaQuantum bHasStockNukaColaQuartz bHasStockNukaColaVictory
 
 	; Return
 
@@ -64,6 +57,23 @@ begin function { ref rObject }
 	let aStockByProduct["Nuka-Cola Quantum"] := bHasStockNukaColaQuantum
 	let aStockByProduct["Nuka-Cola Quartz"] := bHasStockNukaColaQuartz
 	let aStockByProduct["Nuka-Cola Victory"] := bHasStockNukaColaVictory
+
+	; Bonus
+
+	array_var aStockBonus = (Call GetRegionalBonusUDF)
+
+	foreach array_var aEntry <- aStockBonus
+		string_var sKey = aEntry["key"]
+		short bHasStock = aEntry["value"]
+
+		let aStockByProduct[$sKey] := bHasStock
+
+		Sv_Destruct sKey
+	loop
+
+	let aStockBonus := Ar_Null
+
+	; Return
 
 	SetFunctionValue aStockByProduct
 
