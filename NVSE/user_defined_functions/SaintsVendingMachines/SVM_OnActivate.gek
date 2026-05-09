@@ -24,7 +24,7 @@ begin function { ref rObject }
 
 	; Run
 
-	if eval aStockByProduct["_HasStock"]
+	if eval aStockByProduct["_Any"]
 		; Alternative text for bottle caps:
 		; "This vending machine has been modified to accept contemporary currency.%rYou have %g Bottle Caps in your inventory."
 		string_var sMenuText = "This vending machine accepts legal US tender.%rYou have $%g in your inventory."

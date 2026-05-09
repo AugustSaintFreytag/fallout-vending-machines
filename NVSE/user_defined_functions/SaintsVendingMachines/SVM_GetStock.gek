@@ -9,7 +9,6 @@ begin function { ref rObject }
 	; Factors
 
 	float fStockFactor = 1.0
-
 	short iStockBonus = (Call GetRegionalBonusUDF)
 
 	; Random
@@ -32,41 +31,39 @@ begin function { ref rObject }
 
 	; Vending
 
-	short bHasStock = 0
-	short iStockNukaCola = 0
-	short iStockNukaColaQuantum = 0
-	short iStockNukaColaQuartz = 0
-	short iStockNukaColaVictory = 0
+	short bHasAnyStock = 0
+	short bHasStockNukaCola = 0
+	short bHasStockNukaColaQuantum = 0
+	short bHasStockNukaColaQuartz = 0
+	short bHasStockNukaColaVictory = 0
 
 	; Stock Pseudo-Randomization
 
 	if eval Player.IsInInterior == 1
-		let iStockNukaCola := (Call GetRandomChanceUDF) < 70
-		let iStockNukaColaQuantum := (Call GetRandomChanceUDF) < 50
-		let iStockNukaColaQuartz := (Call GetRandomChanceUDF) < 10
-		let iStockNukaColaVictory := (Call GetRandomChanceUDF) < 5
-
-		let bHasStock := eval (iStockNukaCola || iStockNukaColaQuantum || iStockNukaColaQuartz || iStockNukaColaVictory)
+		let bHasStockNukaCola := (Call GetRandomChanceUDF) < 70
+		let bHasStockNukaColaQuantum := (Call GetRandomChanceUDF) < 50
+		let bHasStockNukaColaQuartz := (Call GetRandomChanceUDF) < 10
+		let bHasStockNukaColaVictory := (Call GetRandomChanceUDF) < 5
 	else
-		let iStockNukaCola := (Call GetRandomChanceUDF) < 50
-		let iStockNukaColaQuantum := (Call GetRandomChanceUDF) < 20
-		let iStockNukaColaQuartz := (Call GetRandomChanceUDF) < 0
-		let iStockNukaColaVictory := (Call GetRandomChanceUDF) < 0
-
-		let bHasStock := eval (iStockNukaCola || iStockNukaColaQuantum || iStockNukaColaQuartz || iStockNukaColaVictory)
+		let bHasStockNukaCola := (Call GetRandomChanceUDF) < 50
+		let bHasStockNukaColaQuantum := (Call GetRandomChanceUDF) < 20
+		let bHasStockNukaColaQuartz := (Call GetRandomChanceUDF) < 0
+		let bHasStockNukaColaVictory := (Call GetRandomChanceUDF) < 0
 	endif
 
-	PrintC "Set vending machine stock: Classic (%g), Quantum (%g), Quartz (%g), Victory (%g)." iStockNukaCola iStockNukaColaQuantum iStockNukaColaQuartz iStockNukaColaVictory
+	let bHasAnyStock := eval (bHasStockNukaCola || bHasStockNukaColaQuantum || bHasStockNukaColaQuartz || bHasStockNukaColaVictory)
+
+	PrintC "Set vending machine stock: Classic (%g), Quantum (%g), Quartz (%g), Victory (%g)." bHasStockNukaCola bHasStockNukaColaQuantum bHasStockNukaColaQuartz bHasStockNukaColaVictory
 
 	; Return
 
 	array_var aStockByProduct = Ar_Construct "stringmap"
 
-	let aStockByProduct["_HasStock"] := bHasStock
-	let aStockByProduct["Nuka-Cola"] := iStockNukaCola
-	let aStockByProduct["Nuka-Cola Quantum"] := iStockNukaColaQuantum
-	let aStockByProduct["Nuka-Cola Quartz"] := iStockNukaColaQuartz
-	let aStockByProduct["Nuka-Cola Victory"] := iStockNukaColaVictory
+	let aStockByProduct["_Any"] := bHasAnyStock
+	let aStockByProduct["Nuka-Cola"] := bHasStockNukaCola
+	let aStockByProduct["Nuka-Cola Quantum"] := bHasStockNukaColaQuantum
+	let aStockByProduct["Nuka-Cola Quartz"] := bHasStockNukaColaQuartz
+	let aStockByProduct["Nuka-Cola Victory"] := bHasStockNukaColaVictory
 
 	SetFunctionValue aStockByProduct
 
