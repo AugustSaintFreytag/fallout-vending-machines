@@ -2,6 +2,7 @@ begin function { ref rObject }
 
 	; UDFs
 
+	ref GetProductsUDF = CompileScript "SaintsVendingMachines\SVM_GetProducts.gek"
 	ref GetObjectSeedUDF = CompileScript "SaintsVendingMachines\SVM_GetObjectSeed.gek"
 	ref GetSeededRandomChanceUDF = CompileScript "SaintsVendingMachines\SVM_GetSeededRandomChance.gek"
 	ref GetRegionalBonusUDF = CompileScript "SaintsVendingMachines\SVM_GetRegionalBonus.gek"
@@ -15,49 +16,45 @@ begin function { ref rObject }
 		short iLocalSeed = iMachineSeed + iMachineSeedTick
 		short iChance = (Call GetSeededRandomChanceUDF iLocalSeed)
 
-		; PrintC "Returning random chance with seed %g, tick %g, result %g." iLocalSeed iMachineSeedTick iChance
+		PrintC "Returning random chance with seed %g, tick %g, result %g/100." iLocalSeed iMachineSeedTick iChance
 
 		SetFunctionValue iChance
 		let iMachineSeedTick := iMachineSeedTick + 1
 	end)
 
-	; Vending
+	; Stock (Products)
 
-	short bHasAnyStock = 0
-	short bHasStockNukaCola = 0
-	short bHasStockNukaColaQuantum = 0
-	short bHasStockNukaColaQuartz = 0
-	short bHasStockNukaColaVictory = 0
+	array_var aProducts = Call GetProductsUDF
+	array_var aStockByProduct = Ar_Construct "stringmap"
 
-	; Stock
+	foreach array_var aEntry <- aProducts
+		let aStockByProduct[$(aEntry["value"])] := 0
+	loop
 
 	if eval Player.IsInInterior == 1
 		; Interior Stock
-		let bHasStockNukaCola := (Call GetRandomChanceUDF) < 70
-		let bHasStockNukaColaQuantum := (Call GetRandomChanceUDF) < 50
-		let bHasStockNukaColaQuartz := (Call GetRandomChanceUDF) < 10
-		let bHasStockNukaColaVictory := (Call GetRandomChanceUDF) < 5
+		let aStockByProduct["Nuka-Cola"] := (Call GetRandomChanceUDF) < 70
+		let aStockByProduct["Nuka-Cola Quantum"] := (Call GetRandomChanceUDF) < 50
+		let aStockByProduct["Nuka-Cola Quartz"] := (Call GetRandomChanceUDF) < 10
+		let aStockByProduct["Nuka-Cola Victory"] := (Call GetRandomChanceUDF) < 5
 	else
 		; Exterior Stock
-		let bHasStockNukaCola := (Call GetRandomChanceUDF) < 50
-		let bHasStockNukaColaQuantum := (Call GetRandomChanceUDF) < 20
+		let aStockByProduct["Nuka-Cola"] := (Call GetRandomChanceUDF) < 50
+		let aStockByProduct["Nuka-Cola Quantum"] := (Call GetRandomChanceUDF) < 20
 	endif
 
-	let bHasAnyStock := eval (bHasStockNukaCola || bHasStockNukaColaQuantum || bHasStockNukaColaQuartz || bHasStockNukaColaVictory)
+	; Stock (Any)
 
-	; PrintC "Set vending machine stock: Classic (%g), Quantum (%g), Quartz (%g), Victory (%g)." bHasStockNukaCola bHasStockNukaColaQuantum bHasStockNukaColaQuartz bHasStockNukaColaVictory
+	let aStockByProduct["_Any"] := 0
 
-	; Return
+	foreach array_var aEntry <- aStockByProduct
+		if eval aEntry["value"] > 0
+			let aStockByProduct["_Any"] := 1
+			break
+		endif
+	loop
 
-	array_var aStockByProduct = Ar_Construct "stringmap"
-
-	let aStockByProduct["_Any"] := bHasAnyStock
-	let aStockByProduct["Nuka-Cola"] := bHasStockNukaCola
-	let aStockByProduct["Nuka-Cola Quantum"] := bHasStockNukaColaQuantum
-	let aStockByProduct["Nuka-Cola Quartz"] := bHasStockNukaColaQuartz
-	let aStockByProduct["Nuka-Cola Victory"] := bHasStockNukaColaVictory
-
-	; Bonus
+	; Regional Bonus
 
 	array_var aStockBonus = (Call GetRegionalBonusUDF)
 
