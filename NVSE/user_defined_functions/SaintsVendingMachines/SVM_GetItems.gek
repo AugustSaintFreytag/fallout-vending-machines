@@ -7,7 +7,7 @@ begin function {}
 	let aItemByProduct["Nuka-Cola Quartz"] := NVNukaColaQuartz
 	let aItemByProduct["Nuka-Cola Victory"] := NVNukaColaVictory
 	let aItemByProduct["Ice Cold Nuka-Cola"] := MS05IceNukaCola
-	let aPriceByProduct["Rum and Nuka"] := RumNukaCola
+	let aItemByProduct["Rum and Nuka"] := RumNukaCola
 
 	SetFunctionValue aItemByProduct
 
