@@ -15,9 +15,6 @@ begin function { ref rObject }
 		short iLocalSeed = iMachineSeed + iMachineSeedTick
 		short iChance = (Call GetSeededRandomChanceUDF iLocalSeed)
 
-		let iChance *= (1 + (1 - fStockFactor))
-		let iChance -= iStockBonus
-
 		; PrintC "Returning random chance with seed %g, tick %g, result %g." iLocalSeed iMachineSeedTick iChance
 
 		SetFunctionValue iChance
