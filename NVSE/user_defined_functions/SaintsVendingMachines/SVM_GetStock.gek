@@ -1,76 +1,23 @@
 begin function { ref rObject }
 
-	; UDFs
+	ref GetStockRegionalUDF = CompileScript "SaintsVendingMachines\SVM_GetStockRegional.gek"
+	ref GetStockDefaultUDF = CompileScript "SaintsVendingMachines\SVM_GetStockDefault.gek"
 
-	ref GetProductsUDF = CompileScript "SaintsVendingMachines\SVM_GetProducts.gek"
-	ref GetObjectSeedUDF = CompileScript "SaintsVendingMachines\SVM_GetObjectSeed.gek"
-	ref GetSeededRandomChanceUDF = CompileScript "SaintsVendingMachines\SVM_GetSeededRandomChance.gek"
-	ref GetRegionalBonusUDF = CompileScript "SaintsVendingMachines\SVM_GetRegionalBonus.gek"
+	array_var aStock
 
-	; Random
+	; Regional
 
-	short iMachineSeed = (Call GetObjectSeedUDF rObject)
-	short iMachineSeedTick = 0
+	let aStock := (Call GetStockRegionalUDF rObject)
 
-	ref GetRandomChanceUDF = (begin function {} 
-		short iLocalSeed = iMachineSeed + iMachineSeedTick
-		short iChance = (Call GetSeededRandomChanceUDF iLocalSeed)
-
-		PrintC "Returning random chance with seed %g, tick %g, result %g/100." iLocalSeed iMachineSeedTick iChance
-
-		SetFunctionValue iChance
-		let iMachineSeedTick := iMachineSeedTick + 1
-	end)
-
-	; Stock (Products)
-
-	array_var aProducts = Call GetProductsUDF
-	array_var aStockByProduct = Ar_Construct "stringmap"
-
-	foreach array_var aEntry <- aProducts
-		let aStockByProduct[$(aEntry["value"])] := 0
-	loop
-
-	if eval Player.IsInInterior == 1
-		; Interior Stock
-		let aStockByProduct["Nuka-Cola"] := (Call GetRandomChanceUDF) < 70
-		let aStockByProduct["Nuka-Cola Quantum"] := (Call GetRandomChanceUDF) < 50
-		let aStockByProduct["Nuka-Cola Quartz"] := (Call GetRandomChanceUDF) < 10
-		let aStockByProduct["Nuka-Cola Victory"] := (Call GetRandomChanceUDF) < 5
-	else
-		; Exterior Stock
-		let aStockByProduct["Nuka-Cola"] := (Call GetRandomChanceUDF) < 50
-		let aStockByProduct["Nuka-Cola Quantum"] := (Call GetRandomChanceUDF) < 20
+	if eval (Ar_Size aStock) > 0
+		; Regional stock override exists, return.
+		SetFunctionValue aStock
+		return
 	endif
 
-	; Stock (Any)
+	; Default
 
-	let aStockByProduct["_Any"] := 0
-
-	foreach array_var aEntry <- aStockByProduct
-		if eval aEntry["value"] > 0
-			let aStockByProduct["_Any"] := 1
-			break
-		endif
-	loop
-
-	; Regional Bonus
-
-	array_var aStockBonus = (Call GetRegionalBonusUDF)
-
-	foreach array_var aEntry <- aStockBonus
-		string_var sKey = aEntry["key"]
-		short bHasStock = aEntry["value"]
-
-		let aStockByProduct[$sKey] := bHasStock
-
-		Sv_Destruct sKey
-	loop
-
-	let aStockBonus := Ar_Null
-
-	; Return
-
-	SetFunctionValue aStockByProduct
+	let aStock := (Call GetStockDefaultUDF rObject)
+	SetFunctionValue aStock
 
 end

@@ -1,0 +1,69 @@
+begin function { ref rObject }
+
+	; UDFs
+
+	ref GetProductsUDF = CompileScript "SaintsVendingMachines\SVM_GetProducts.gek"
+	ref GetObjectSeedUDF = CompileScript "SaintsVendingMachines\SVM_GetObjectSeed.gek"
+	ref GetSeededRandomChanceUDF = CompileScript "SaintsVendingMachines\SVM_GetSeededRandomChance.gek"
+
+	; Random
+
+	short iMachineSeed = (Call GetObjectSeedUDF rObject)
+	short iMachineSeedTick = 0
+
+	ref GetRandomChanceUDF = (begin function {} 
+		short iLocalSeed = iMachineSeed + iMachineSeedTick
+		short iChance = (Call GetSeededRandomChanceUDF iLocalSeed)
+
+		PrintC "Returning random chance with seed %g, tick %g, result %g/100." iLocalSeed iMachineSeedTick iChance
+
+		SetFunctionValue iChance
+		let iMachineSeedTick := iMachineSeedTick + 1
+	end)
+
+	; Stock (Products)
+
+	array_var aProducts = Call GetProductsUDF
+	array_var aStock = Ar_Construct "stringmap"
+
+	foreach array_var aEntry <- aProducts
+		let aStock[$(aEntry["value"])] := 0
+	loop
+
+	if eval Player.IsInInterior == 1
+		if eval (Call GetRandomChanceUDF) <= 2
+			; Special Ice Cold Stock
+			let aStock["Ice Cold Nuka-Cola"] := 1
+		elseif eval (Call GetRandomChanceUDF) <= 2
+			; Special Rum & Nuka Stock
+			let aStock["Nuka-Cola"] := 1
+			let aStock["Rum and Nuka"] := 1
+		else
+			; Default Interior Stock
+			let aStock["Nuka-Cola"] := (Call GetRandomChanceUDF) < 70
+			let aStock["Nuka-Cola Quantum"] := (Call GetRandomChanceUDF) < 50
+			let aStock["Nuka-Cola Quartz"] := (Call GetRandomChanceUDF) < 10
+			let aStock["Nuka-Cola Victory"] := (Call GetRandomChanceUDF) < 5
+		endif
+	else
+		; Default Exterior Stock
+		let aStock["Nuka-Cola"] := (Call GetRandomChanceUDF) < 50
+		let aStock["Nuka-Cola Quantum"] := (Call GetRandomChanceUDF) < 20
+	endif
+
+	; Stock (Any)
+
+	let aStock["_Any"] := 0
+
+	foreach array_var aEntry <- aStock
+		if eval (aEntry["value"] > 0)
+			let aStock["_Any"] := 1
+			break
+		endif
+	loop
+
+	; Return
+
+	SetFunctionValue aStock
+
+end

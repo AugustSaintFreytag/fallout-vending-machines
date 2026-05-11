@@ -1,0 +1,18 @@
+begin function { ref rObject }
+
+	array_var aStock = Ar_Construct "stringmap"
+	string_var sRegionName = GetEditorID (rObject.GetParentWorldspace)
+
+	if eval sRegionName == "MegatonWorld"
+		Print "Setting regional vending machine stock for Megaton."
+
+		let aStock["_Any"] := 1
+		let aStock["Nuka-Cola"] := 1
+	else
+		PrintC "No regional vending machine stock for world space '%z'." (sRegionName)
+	endif
+
+	SetFunctionValue aStock
+	Sv_Destruct sRegionName
+
+end
