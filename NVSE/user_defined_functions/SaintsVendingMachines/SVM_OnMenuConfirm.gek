@@ -73,11 +73,11 @@ begin function { short iSparseIndex }
 	; Run
 
 	if eval (rItem != 0) && (iPrice > 0)
-		PrintC "Processing purchase for '%z', incoming index %g, product index %g, product '%z', price %g." (GetFormIDString rObject) iSparseIndex iIndex (GetName rItem) iPrice
+		;PrintC "Processing purchase for '%z', incoming index %g, product index %g, product '%z', price %g." (GetFormIDString rObject) iSparseIndex iIndex (GetName rItem) iPrice
 		Call TryPurchaseProductUDF rItem iPrice
 		Call PlayCloseSoundUDF rObject
 	else
-		PrintC "Canceling purchase for '%z' due to missing product, incoming index %g, product index %g." (GetFormIDString rObject) iSparseIndex iIndex
+		;PrintC "Canceling purchase for '%z' due to missing product, incoming index %g, product index %g." (GetFormIDString rObject) iSparseIndex iIndex
 	endif
 
 	; Clean-Up

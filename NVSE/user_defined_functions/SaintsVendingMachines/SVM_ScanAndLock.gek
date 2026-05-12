@@ -37,13 +37,13 @@ begin Function { ref rEnteredCell }
 		
 		if rObject.GetLocked == 0
 			if (fDaysPassed - fTimeLastLocked) > 3.0
-				PrintC "Locking vending machine '%z' with lock level %g." (GetFormIDString rObject) iLockLevel
+				;PrintC "Locking vending machine '%z' with lock level %g." (GetFormIDString rObject) iLockLevel
 				rObject.Lock iLockLevel
 			else
-				PrintC "Did not lock vending machine '%z', already locked recently (days passed %.2f, time last locked %.2f)." (GetFormIDString rObject) fDaysPassed fTimeLastLocked
+				;PrintC "Did not lock vending machine '%z', already locked recently (days passed %.2f, time last locked %.2f)." (GetFormIDString rObject) fDaysPassed fTimeLastLocked
 			endif
 		else
-			PrintC "Skipping already locked vending machine '%z'." (GetFormIDString rObject)
+			;PrintC "Skipping already locked vending machine '%z'." (GetFormIDString rObject)
 		endif
 
 		; Either reference was locked or was already locked, always renew timer.

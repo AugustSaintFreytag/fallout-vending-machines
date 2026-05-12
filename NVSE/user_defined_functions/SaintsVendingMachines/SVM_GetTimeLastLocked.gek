@@ -1,7 +1,7 @@
 begin Function { ref rObject }
 
 	float fTimeLastLocked = RefMapArrayGetFloat "*SVM_TimeLastLocked" rObject
-	PrintC "Getting time last locked for machine '%z' to %.2f day(s)." (GetFormIDString rObject) fTimeLastLocked
+	;PrintC "Getting time last locked for machine '%z' to %.2f day(s)." (GetFormIDString rObject) fTimeLastLocked
 
 	SetFunctionValue fTimeLastLocked
 	
