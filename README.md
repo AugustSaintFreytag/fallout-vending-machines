@@ -4,7 +4,7 @@ A mod for Fallout: New Vegas and Tale of Two Wastelands that adds full interacti
 
 ## About
 
-This mod introduces the ability to interact with vending machines to purchase a variety of products from procedurally generated stock, classic Nuka-Cola, and less frequently, Quantum, Quartz, or Victory. Very rarely, machines may also offer Ice Cold Nuka-Cola or even Rum and Nuka. Written in xNVSE/JIP, lightweight, ESPLess.
+This mod introduces the ability to interact with vending machines to purchase a variety of products from procedurally generated stock, classic Nuka-Cola, and less frequently, Quantum, Quartz, or Victory. Very rarely, machines may also offer Ice Cold Nuka-Cola or even Rum and Nuka. Written in xNVSE/JIP, lightweight, ESPLess. Safe to add or remove at any time.
 
 - Activating a vending machine will open a purchase menu, based on the machine's stock.
 - The machine sells stocked products at fixed prices for *Pre-War Money*.
@@ -22,7 +22,7 @@ Concept and code by Saint, original artwork by Mezu (#mezulino).
 
 Broadly compatible with all mods. New container-type placed Nuka-Cola vending machines will be compatible automatically, statics will not be replaced. Uses [KEYWORDS](https://www.nexusmods.com/newvegas/mods/83088) to determine what is a vending machine.
 
-**Tale of Two Wastelands:** All vending machine container ids for Fallout 3 and New Vegas are already included, works out of the box in the Capital Wasteland and New Vegas.
+**Tale of Two Wastelands:** All vending machine container ids for Fallout 3 and New Vegas are already included, works out of the box in the Capital Wasteland and the Mojave.
 
 **Owned machines:** Vending machines placed in certain communities may be marked as owned. Looking at a locked and owned vending machine will mark the "Use" text as red but activating it will *not* count as a crime (like breaking in or stealing). You can freely use an owned vending machine as long as you're not sneak-activating it.
 
@@ -33,6 +33,7 @@ Creatively, I think this makes a lot of sense in-universe, real world vending ma
 ## Roadmap
 
 - **Planned:** Support for Sunset Sarsaparilla machines in the Mojave.
+- - **Planned:** Configurable pricing for stocked products via INI file.
 - **Done:** Rare chance for variants like Ice Cold and Nuka & Rum.
 - **Done:** Stock overrides for world spaces by name (e.g. Megaton).
 
