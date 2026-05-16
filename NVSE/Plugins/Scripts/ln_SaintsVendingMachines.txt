@@ -1,7 +1,7 @@
 ; UDFs
 
-ref OnActivateUDF = CompileScript "SaintsVendingMachines\SVM_OnActivate.gek"
-ref ScanAndLockUDF = CompileScript "SaintsVendingMachines\SVM_ScanAndLock.gek"
+ref OnActivateUDF = CompileScript "SaintsVendingMachines\OnActivate.gek"
+ref ScanAndLockUDF = CompileScript "SaintsVendingMachines\ScanAndLock.gek"
 
 ; Cell Enter Event
 

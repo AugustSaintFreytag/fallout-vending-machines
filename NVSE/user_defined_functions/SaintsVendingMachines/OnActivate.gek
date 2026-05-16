@@ -2,12 +2,12 @@ begin function { ref rObject }
 
 	; UDFs
 
-	ref OnMenuConfirmUDF = CompileScript "SaintsVendingMachines\SVM_OnMenuConfirm.gek"
-	ref GetSeededRandomChanceUDF = CompileScript "SaintsVendingMachines\SVM_GetSeededRandomChance.gek"
+	ref OnMenuConfirmUDF = CompileScript "SaintsVendingMachines\OnMenuConfirm.gek"
+	ref GetSeededRandomChanceUDF = CompileScript "SaintsVendingMachines\GetSeededRandomChance.gek"
 
-	ref GetProductItemsUDF = CompileScript "SaintsVendingMachines\SVM_GetProductItems.gek"
-	ref GetProductPricesUDF = CompileScript "SaintsVendingMachines\SVM_GetProductPrices.gek"
-	ref GetStockUDF = CompileScript "SaintsVendingMachines\SVM_GetStock.gek"
+	ref GetProductItemsUDF = CompileScript "SaintsVendingMachines\GetProductItems.gek"
+	ref GetProductPricesUDF = CompileScript "SaintsVendingMachines\GetProductPrices.gek"
+	ref GetStockUDF = CompileScript "SaintsVendingMachines\GetStock.gek"
 
 	ref PlayMenuOpenSoundUDF = CompileScript "SaintsVendingMachines\SVM_PlayMenuOpenSound.gek"
 

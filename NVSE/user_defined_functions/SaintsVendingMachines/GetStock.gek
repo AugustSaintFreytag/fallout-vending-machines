@@ -1,7 +1,7 @@
 begin function { ref rObject }
 
-	ref GetStockRegionalUDF = CompileScript "SaintsVendingMachines\SVM_GetStockRegional.gek"
-	ref GetStockDefaultUDF = CompileScript "SaintsVendingMachines\SVM_GetStockDefault.gek"
+	ref GetStockRegionalUDF = CompileScript "SaintsVendingMachines\GetStockRegional.gek"
+	ref GetStockDefaultUDF = CompileScript "SaintsVendingMachines\GetStockDefault.gek"
 
 	array_var aStock
 

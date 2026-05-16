@@ -2,11 +2,11 @@ begin function { short iSparseIndex }
 
 	; UDFs
 
-	ref GetProductsUDF = CompileScript "SaintsVendingMachines\SVM_GetProducts.gek"
-	ref GetItemsUDF = CompileScript "SaintsVendingMachines\SVM_GetItems.gek"
-	ref GetPricesUDF = CompileScript "SaintsVendingMachines\SVM_GetPrices.gek"
-	ref PlayMenuCancelSoundUDF = CompileScript "SaintsVendingMachines\SVM_PlayMenuCancelSound.gek"
-	ref PlayMenuBuySoundUDF = CompileScript "SaintsVendingMachines\SVM_PlayMenuBuySound.gek"
+	ref GetProductsUDF = CompileScript "SaintsVendingMachines\GetProducts.gek"
+	ref GetItemsUDF = CompileScript "SaintsVendingMachines\GetItems.gek"
+	ref GetPricesUDF = CompileScript "SaintsVendingMachines\GetPrices.gek"
+	ref PlayMenuCancelSoundUDF = CompileScript "SaintsVendingMachines\PlayMenuCancelSound.gek"
+	ref PlayMenuBuySoundUDF = CompileScript "SaintsVendingMachines\PlayMenuBuySound.gek"
 
 	; UDFs (Local)
 
