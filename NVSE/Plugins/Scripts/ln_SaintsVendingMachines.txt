@@ -6,7 +6,7 @@ ref ScanAndLockUDF = CompileScript "SaintsVendingMachines\SVM_ScanAndLock.gek"
 ; Cell Enter Event
 
 SetEventHandler "OnCellEnter" (begin function { ref rEnteredCell }
-	Call ScanAndLockUDF rEnteredCell
+	Call ScanAndLockUDF
 end)
 
 ; Post Load Game Event
@@ -16,7 +16,7 @@ SetEventHandler "PostLoadGame" (begin function { short bSuccessfullyLoaded }
 		return
 	endif
 
-	Call ScanAndLockUDF Player.GetParentCell
+	Call ScanAndLockUDF
 end)
 
 ; Activate Event
