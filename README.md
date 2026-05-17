@@ -33,7 +33,8 @@ Creatively, I think this makes a lot of sense in-universe, real world vending ma
 ## Roadmap
 
 - **Planned:** Support for Sunset Sarsaparilla machines in the Mojave.
-- - **Planned:** Configurable pricing for stocked products via INI file.
+- **Planned:** Configurable pricing for stocked products via INI file.
+- **Considered:** Add support for Nuka-World Imports items.
 - **Done:** Rare chance for variants like Ice Cold and Nuka & Rum.
 - **Done:** Stock overrides for world spaces by name (e.g. Megaton).
 
