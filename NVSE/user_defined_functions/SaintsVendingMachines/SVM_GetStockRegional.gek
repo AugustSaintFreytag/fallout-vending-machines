@@ -4,8 +4,9 @@ begin function { ref rObject }
 	string_var sRegionName = GetEditorID (rObject.GetParentWorldspace)
 
 	if eval sRegionName == "MegatonWorld"
-		;Print "Setting regional vending machine stock for Megaton."
-
+		let aStock["_Any"] := 1
+		let aStock["Nuka-Cola"] := 1
+	elseif eval sRegionName == "PointLookout"
 		let aStock["_Any"] := 1
 		let aStock["Nuka-Cola"] := 1
 	else
