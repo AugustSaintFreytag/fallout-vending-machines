@@ -5,6 +5,8 @@ begin function { short iSparseIndex }
 	ref GetProductsUDF = CompileScript "SaintsVendingMachines\SVM_GetProducts.gek"
 	ref GetItemsUDF = CompileScript "SaintsVendingMachines\SVM_GetItems.gek"
 	ref GetPricesUDF = CompileScript "SaintsVendingMachines\SVM_GetPrices.gek"
+	ref PlayMenuCancelSoundUDF = CompileScript "SaintsVendingMachines\SVM_PlayMenuCancelSound.gek"
+	ref PlayMenuBuySoundUDF = CompileScript "SaintsVendingMachines\SVM_PlayMenuBuySound.gek"
 
 	; UDFs (Local)
 
@@ -12,14 +14,22 @@ begin function { short iSparseIndex }
 		ref rCloseSound = GetContainerSound rObject 1
 
 		if IsFormValid rCloseSound
+			PrintC "Found valid container close sound for object '%z'." (GetName rObject)
 			rObject.PlaySound rCloseSound 1
+		else
+			PrintC "Could not find valid container close sound for object '%z'." (GetName rObject)
 		endif
 	end)
 
-	ref PurchaseProductUDF = (begin function { ref rItem, short iPrice } 
+	ref PurchaseProductUDF = (begin function { ref rItem, short iPrice }
+		Call PlayMenuBuySoundUDF
+		
 		Player.RemoveItem PrewarMoney iPrice 1
-		Player.AddItem rItem 1
-		Player.PlaySound PHYBottleH 1
+		
+		CallAfter 0.23 (begin function {} 
+			Player.AddItem rItem 1
+			Player.PlaySound PHYBottleH 1
+		end)
 	end)
 
 	ref TryPurchaseProductUDF = (begin function { ref rItem, short iPrice } 
@@ -57,6 +67,7 @@ begin function { short iSparseIndex }
 
 	if eval iIndex == -1
 		let aLastProductIndices := Ar_Null
+		Call PlayMenuCancelSoundUDF
 		return
 	endif
 
@@ -72,12 +83,14 @@ begin function { short iSparseIndex }
 
 	; Run
 
+	Call PlayCloseSoundUDF rObject
+
 	if eval (rItem != 0) && (iPrice > 0)
 		;PrintC "Processing purchase for '%z', incoming index %g, product index %g, product '%z', price %g." (GetFormIDString rObject) iSparseIndex iIndex (GetName rItem) iPrice
 		Call TryPurchaseProductUDF rItem iPrice
-		Call PlayCloseSoundUDF rObject
 	else
 		;PrintC "Canceling purchase for '%z' due to missing product, incoming index %g, product index %g." (GetFormIDString rObject) iSparseIndex iIndex
+		Call PlayMenuCancelSoundUDF
 	endif
 
 	; Clean-Up
