@@ -39,7 +39,7 @@ begin Function {}
 		float fTimeLastLocked = (Call GetTimeLastLockedUDF rObject)
 		
 		if rObject.GetLocked == 0
-			if (fDaysPassed - fTimeLastLocked) > 3.0
+			if eval (fTimeLastLocked == -1) || (fDaysPassed - fTimeLastLocked) > 3.0
 				;PrintC "Locking vending machine '%z' with lock level %g." (GetFormIDString rObject) iLockLevel
 				rObject.Lock iLockLevel
 			else
