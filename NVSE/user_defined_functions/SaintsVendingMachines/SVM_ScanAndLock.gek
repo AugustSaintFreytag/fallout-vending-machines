@@ -1,4 +1,4 @@
-begin Function { ref rEnteredCell }
+begin Function {}
 
 	; References
 
@@ -16,7 +16,10 @@ begin Function { ref rEnteredCell }
 	; Scan
 
 	float fDaysPassed = GetGameDaysPassed 2277 08 17
-	array_var aLoadedReferences = Player.GetRefs 27 1 1
+	array_var aLoadedReferences = Player.GetRefs 27 -1 1
+	short iNumLoadedReferences = Ar_Size aLoadedReferences
+
+	;PrintC "Player entered cell with %g container(s)." iNumLoadedReferences
 	
 	short iReferenceIndex = 0
 
@@ -36,7 +39,7 @@ begin Function { ref rEnteredCell }
 		float fTimeLastLocked = (Call GetTimeLastLockedUDF rObject)
 		
 		if rObject.GetLocked == 0
-			if (fDaysPassed - fTimeLastLocked) > 3.0
+			if eval (fTimeLastLocked == -1) || (fDaysPassed - fTimeLastLocked) > 3.0
 				;PrintC "Locking vending machine '%z' with lock level %g." (GetFormIDString rObject) iLockLevel
 				rObject.Lock iLockLevel
 			else

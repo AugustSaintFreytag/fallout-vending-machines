@@ -1,6 +1,13 @@
 begin Function { ref rObject }
 
-	float fTimeLastLocked = RefMapArrayGetFloat "*SVM_TimeLastLocked" rObject
+	short bHasStoredValue = Player.RefMapArrayGetType "*SVM_TimeLastLocked" rObject
+
+	if eval bHasStoredValue == 0
+		SetFunctionValue -1
+		return
+	endif
+
+	float fTimeLastLocked = Player.RefMapArrayGetFloat "*SVM_TimeLastLocked" rObject
 	;PrintC "Getting time last locked for machine '%z' to %.2f day(s)." (GetFormIDString rObject) fTimeLastLocked
 
 	SetFunctionValue fTimeLastLocked
