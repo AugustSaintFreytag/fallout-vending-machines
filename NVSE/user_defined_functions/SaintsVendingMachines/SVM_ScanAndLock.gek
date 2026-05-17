@@ -4,14 +4,7 @@ begin Function {}
 
 	ref GetTimeLastLockedUDF = CompileScript "SaintsVendingMachines\SVM_GetTimeLastLocked.gek"
 	ref SetTimeLastLockedUDF = CompileScript "SaintsVendingMachines\SVM_SetTimeLastLocked.gek"
-	
-	; Lock Level
-
-	short iLuckBase = (Player.GetActorValue Luck) - 3
-	short iLuckBonus = GetMaxOf 0 iLuckBase
-	short iLockLevelMax = 8 - iLuckBonus
-	short iLockLevelMaxRandom = Rand 0, iLockLevelMax
-	short iLockLevel = 5 + 5 * iLockLevelMaxRandom
+	ref GetRandomLockLevelUDF = CompileScript "SaintsVendingMachines\SVM_GetRandomLockLevel.gek"
 
 	; Scan
 
@@ -40,8 +33,10 @@ begin Function {}
 		
 		if rObject.GetLocked == 0
 			if eval (fTimeLastLocked == -1) || (fDaysPassed - fTimeLastLocked) > 3.0
-				;PrintC "Locking vending machine '%z' with lock level %g." (GetFormIDString rObject) iLockLevel
+				short iLockLevel = Call GetRandomLockLevelUDF
 				rObject.Lock iLockLevel
+
+				;PrintC "Locked vending machine '%z' with lock level %g." (GetFormIDString rObject) iLockLevel
 			else
 				;PrintC "Did not lock vending machine '%z', already locked recently (days passed %.2f, time last locked %.2f)." (GetFormIDString rObject) fDaysPassed fTimeLastLocked
 			endif

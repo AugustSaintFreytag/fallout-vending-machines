@@ -1,0 +1,11 @@
+begin function {}
+
+	short iLuckBase = (Player.GetActorValue Luck) - 3
+	short iLuckBonus = GetMaxOf 0 iLuckBase
+	short iLockLevelMax = 8 - iLuckBonus
+	short iLockLevelMaxRandom = Rand 0, iLockLevelMax
+	short iLockLevel = 5 + 5 * iLockLevelMaxRandom
+
+	SetFunctionValue iLockLevel
+
+end
