@@ -26,7 +26,7 @@ begin function { short iSparseIndex }
 		
 		Player.RemoveItem PrewarMoney iPrice 1
 		
-		CallAfter 0.23 (begin function {} 
+		CallAfter 0.5 (begin function {} 
 			Player.AddItem rItem 1
 			Player.PlaySound PHYBottleH 1
 		end)
