@@ -1,0 +1,25 @@
+begin function {}
+
+	; Disabled
+	return
+
+	; Stop Existing Sound
+
+	ref rExistingSound = AuxiliaryVariableGetRef "*SVM_rMenuOpenSound"
+
+	if eval rExistingSound
+		Player.StopSound rExistingSound
+	endif
+
+	; Play Sound
+
+	ref rSound = TempCloneForm FSTMetal 1
+
+	SetSoundTraitNumeric rSound 3 -6.0
+	SetSoundSourceFile rSound "fx\obj\vendingmachine\menu_open\"
+	
+	Player.PlaySound rSound 1
+
+	AuxiliaryVariableSetRef "*SVM_rMenuOpenSound" rSound
+
+end

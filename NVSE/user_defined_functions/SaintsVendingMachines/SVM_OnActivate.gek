@@ -9,6 +9,8 @@ begin function { ref rObject }
 	ref GetPricesUDF = CompileScript "SaintsVendingMachines\SVM_GetPrices.gek"
 	ref GetStockUDF = CompileScript "SaintsVendingMachines\SVM_GetStock.gek"
 
+	ref PlayMenuOpenSoundUDF = CompileScript "SaintsVendingMachines\SVM_PlayMenuOpenSound.gek"
+
 	; Init
 
 	if eval rObject == 0
@@ -64,6 +66,8 @@ begin function { ref rObject }
 			rObject.PlaySound rOpenSound 1
 		endif
 
+		Call PlayMenuOpenSoundUDF
+
 		; Message
 
 		Player.AuxiliaryVariableSetRef "*SVM_aLastVendingMachine" rObject
@@ -71,6 +75,7 @@ begin function { ref rObject }
 	
 		short iPlayerCurrency = Player.GetItemCount PrewarMoney
 		MessageBoxExAlt OnMenuConfirmUDF ($sMenuText) (iPlayerCurrency * 10)
+
 	else
 		MessageExAlt 2 "Interface\Icons\Message Icons\glow_message_vaultboy_sad.dds|This vending machine is out of stock."
 	endif
