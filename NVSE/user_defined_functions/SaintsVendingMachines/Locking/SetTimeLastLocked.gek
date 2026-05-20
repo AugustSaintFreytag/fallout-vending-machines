@@ -1,0 +1,8 @@
+begin Function { ref rObject }
+	
+	float fTimeLastLocked = GetGameDaysPassed 2277 08 17
+	Player.RefMapArraySetFloat "SVM_TimeLastLocked" fTimeLastLocked rObject
+
+	; PrintC "Setting time last locked for machine '%z' to current time, %.2f days." (GetFormIDString rObject) fTimeLastLocked
+
+end

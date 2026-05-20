@@ -3,13 +3,13 @@ begin function { ref rObject }
 	; UDFs
 
 	ref OnMenuConfirmUDF = CompileScript "SaintsVendingMachines\OnMenuConfirm.gek"
-	ref GetSeededRandomChanceUDF = CompileScript "SaintsVendingMachines\GetSeededRandomChance.gek"
+	ref GetSeededRandomChanceUDF = CompileScript "SaintsVendingMachines\Utility\GetSeededRandomChance.gek"
 
-	ref GetProductItemsUDF = CompileScript "SaintsVendingMachines\GetProductItems.gek"
-	ref GetProductPricesUDF = CompileScript "SaintsVendingMachines\GetProductPrices.gek"
-	ref GetStockUDF = CompileScript "SaintsVendingMachines\GetStock.gek"
+	ref GetProductItemsUDF = CompileScript "SaintsVendingMachines\Products\GetProductItems.gek"
+	ref GetProductPricesUDF = CompileScript "SaintsVendingMachines\Products\GetProductPrices.gek"
+	ref GetStockUDF = CompileScript "SaintsVendingMachines\Stock\GetStock.gek"
 
-	ref PlayMenuOpenSoundUDF = CompileScript "SaintsVendingMachines\SVM_PlayMenuOpenSound.gek"
+	ref PlayMenuOpenSoundUDF = CompileScript "SaintsVendingMachines\Sound\PlayMenuOpenSound.gek"
 
 	; Init
 

@@ -2,8 +2,8 @@ begin function { ref rObject }
 
 	; UDFs
 
-	ref GetObjectSeedUDF = CompileScript "SaintsVendingMachines\GetObjectSeed.gek"
-	ref GetSeededRandomChanceUDF = CompileScript "SaintsVendingMachines\GetSeededRandomChance.gek"
+	ref GetObjectSeedUDF = CompileScript "SaintsVendingMachines\Utility\GetObjectSeed.gek"
+	ref GetSeededRandomChanceUDF = CompileScript "SaintsVendingMachines\Utility\GetSeededRandomChance.gek"
 
 	; Random
 

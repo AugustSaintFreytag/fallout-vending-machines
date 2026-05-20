@@ -2,9 +2,9 @@ begin Function {}
 
 	; References
 
-	ref GetTimeLastLockedUDF = CompileScript "SaintsVendingMachines\GetTimeLastLocked.gek"
-	ref SetTimeLastLockedUDF = CompileScript "SaintsVendingMachines\SetTimeLastLocked.gek"
-	ref GetRandomLockLevelUDF = CompileScript "SaintsVendingMachines\GetRandomLockLevel.gek"
+	ref GetTimeLastLockedUDF = CompileScript "SaintsVendingMachines\Locking\GetTimeLastLocked.gek"
+	ref SetTimeLastLockedUDF = CompileScript "SaintsVendingMachines\Locking\SetTimeLastLocked.gek"
+	ref GetRandomLockLevelUDF = CompileScript "SaintsVendingMachines\Locking\GetRandomLockLevel.gek"
 
 	; Scan
 
