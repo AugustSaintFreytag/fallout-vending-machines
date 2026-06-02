@@ -3,6 +3,10 @@
 ref OnActivateUDF = CompileScript "SaintsVendingMachines\OnActivate.gek"
 ref ScanAndLockUDF = CompileScript "SaintsVendingMachines\ScanAndLock.gek"
 
+; Legacy State
+
+RefMapArrayDestroy "SVM_TimeLastLocked"
+
 ; Cell Enter Event
 
 SetEventHandler "OnCellEnter" (begin function { ref rEnteredCell }

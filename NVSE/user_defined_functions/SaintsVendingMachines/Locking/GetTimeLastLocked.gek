@@ -1,14 +1,20 @@
 begin function { ref rObject }
 
-	short bHasStoredValue = Player.RefMapArrayGetType "SVM_TimeLastLocked" rObject
+	string_var sMachineId = GetFormIDString rObject
+	float fDaysLastLocked = Player.AuxStringMapArrayGetFloat "SVM_TimeLastLockedByMachineId" ($sMachineId)
 
-	if eval bHasStoredValue == 0
-		SetFunctionValue -1
+	if fDaysLastLocked == 0
+		SetFunctionValue (-1)
+		Sv_Destruct sMachineId
 		return
 	endif
 
-	float fDaysLastLocked = Player.RefMapArrayGetFloat "SVM_TimeLastLocked" rObject
+	float fCurrentDays = GetGameDaysPassed 2277 08 17
+	float fDaysSinceLastLocked = fCurrentDays - fDaysLastLocked
+
+	PrintC "Getting time for machine '%z', last locked %.2f days ago (%.2f days)." sMachineId fDaysSinceLastLocked fDaysLastLocked
 
 	SetFunctionValue fDaysLastLocked
+	Sv_Destruct sMachineId
 	
 end

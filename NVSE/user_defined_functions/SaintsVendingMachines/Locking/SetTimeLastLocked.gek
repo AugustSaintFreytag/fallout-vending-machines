@@ -1,8 +1,12 @@
 begin function { ref rObject }
 	
 	float fTimeLastLocked = GetGameDaysPassed 2277 08 17
-	Player.RefMapArraySetFloat "SVM_TimeLastLocked" fTimeLastLocked rObject
+	string_var sMachineId = GetFormIDString rObject
+	
+	Player.AuxStringMapArraySetFloat "SVM_TimeLastLockedByMachineId" ($sMachineId) fTimeLastLocked
 
-	; PrintC "Setting time last locked for machine '%z' to current time, %.2f days." (GetFormIDString rObject) fTimeLastLocked
+	PrintC "Setting time last locked for machine '%z' to current time, %.2f days." sMachineId fTimeLastLocked
+
+	Sv_Destruct sMachineId
 
 end
