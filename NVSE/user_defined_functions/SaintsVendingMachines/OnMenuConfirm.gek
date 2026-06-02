@@ -72,8 +72,8 @@ begin function { short iSparseIndex }
 
 	; Item & Price
 
-	array_var aProductPrices = (Call GetPricesUDF)
-	array_var aProductItems = (Call GetItemsUDF)
+	array_var aProductItems = (Call GetProductItemsUDF)
+	array_var aProductPrices = (Call GetProductPricesUDF)
 	array_var aProducts = Ar_Keys aProductItems
 
 	string_var sProduct = aProducts[iIndex]

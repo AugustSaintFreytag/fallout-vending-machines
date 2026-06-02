@@ -1,4 +1,4 @@
-begin Function { ref rObject }
+begin function { ref rObject }
 
 	short bHasStoredValue = Player.RefMapArrayGetType "SVM_TimeLastLocked" rObject
 

@@ -24,8 +24,6 @@ end)
 SetEventHandlerAlt "ShowOff:OnPreActivate" (begin function { ref rActivator, short bIsActivationNotPrevented }
 	ref rActivated = GetSelfAlt
 
-	; Can be expanded to check for `HasKeyword rActivated "SunsetSarsaparillaVendingMachine"` in the future.
-
 	if eval HasKeyword rActivated "NukaColaVendingMachine"
 		if eval player.IsSneaking == 1
 			return

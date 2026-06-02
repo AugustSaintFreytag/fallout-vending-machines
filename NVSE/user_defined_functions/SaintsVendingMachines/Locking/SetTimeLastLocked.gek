@@ -1,4 +1,4 @@
-begin Function { ref rObject }
+begin function { ref rObject }
 	
 	float fTimeLastLocked = GetGameDaysPassed 2277 08 17
 	Player.RefMapArraySetFloat "SVM_TimeLastLocked" fTimeLastLocked rObject
