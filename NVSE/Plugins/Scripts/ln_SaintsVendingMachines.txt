@@ -1,7 +1,7 @@
 ; UDFs
 
-ref OnActivateUDF = CompileScript "SaintsVendingMachines\SVM_OnActivate.gek"
-ref ScanAndLockUDF = CompileScript "SaintsVendingMachines\SVM_ScanAndLock.gek"
+ref OnActivateUDF = CompileScript "SaintsVendingMachines\OnActivate.gek"
+ref ScanAndLockUDF = CompileScript "SaintsVendingMachines\ScanAndLock.gek"
 
 ; Cell Enter Event
 
@@ -23,8 +23,6 @@ end)
 
 SetEventHandlerAlt "ShowOff:OnPreActivate" (begin function { ref rActivator, short bIsActivationNotPrevented }
 	ref rActivated = GetSelfAlt
-
-	; Can be expanded to check for `HasKeyword rActivated "SunsetSarsaparillaVendingMachine"` in the future.
 
 	if eval HasKeyword rActivated "NukaColaVendingMachine"
 		if eval player.IsSneaking == 1

@@ -2,11 +2,10 @@ begin function { short iSparseIndex }
 
 	; UDFs
 
-	ref GetProductsUDF = CompileScript "SaintsVendingMachines\SVM_GetProducts.gek"
-	ref GetItemsUDF = CompileScript "SaintsVendingMachines\SVM_GetItems.gek"
-	ref GetPricesUDF = CompileScript "SaintsVendingMachines\SVM_GetPrices.gek"
-	ref PlayMenuCancelSoundUDF = CompileScript "SaintsVendingMachines\SVM_PlayMenuCancelSound.gek"
-	ref PlayMenuBuySoundUDF = CompileScript "SaintsVendingMachines\SVM_PlayMenuBuySound.gek"
+	ref GetProductItemsUDF = CompileScript "SaintsVendingMachines\Products\GetProductItems.gek"
+	ref GetProductPricesUDF = CompileScript "SaintsVendingMachines\Products\GetProductPrices.gek"
+	ref PlayMenuCancelSoundUDF = CompileScript "SaintsVendingMachines\Sound\PlayMenuCancelSound.gek"
+	ref PlayMenuBuySoundUDF = CompileScript "SaintsVendingMachines\Sound\PlayMenuBuySound.gek"
 
 	; UDFs (Local)
 
@@ -73,13 +72,13 @@ begin function { short iSparseIndex }
 
 	; Item & Price
 
-	array_var aProducts = (Call GetProductsUDF)
-	array_var aPriceByProduct = (Call GetPricesUDF)
-	array_var aItemByProduct = (Call GetItemsUDF)
+	array_var aProductItems = (Call GetProductItemsUDF)
+	array_var aProductPrices = (Call GetProductPricesUDF)
+	array_var aProducts = Ar_Keys aProductItems
 
 	string_var sProduct = aProducts[iIndex]
-	short iPrice = aPriceByProduct[$sProduct]
-	ref rItem = aItemByProduct[$sProduct]
+	short iPrice = aProductPrices[$sProduct]
+	ref rItem = aProductItems[$sProduct]
 
 	; Run
 
@@ -96,8 +95,8 @@ begin function { short iSparseIndex }
 	; Clean-Up
 
 	let aProducts := Ar_Null
-	let aPriceByProduct := Ar_Null
-	let aItemByProduct := Ar_Null
+	let aProductPrices := Ar_Null
+	let aProductItems := Ar_Null
 	let aLastProductIndices := Ar_Null
 
 end

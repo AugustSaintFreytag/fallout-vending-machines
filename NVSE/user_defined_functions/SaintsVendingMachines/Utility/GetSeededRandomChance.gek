@@ -1,4 +1,4 @@
-begin Function { short iSeed }
+begin function { short iSeed }
 
     float iBound = 4091  ; prime, keeps all products safely below 2^24
 

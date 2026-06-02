@@ -2,9 +2,10 @@ begin function { ref rObject }
 
 	; UDFs
 
-	ref GetProductsUDF = CompileScript "SaintsVendingMachines\SVM_GetProducts.gek"
-	ref GetObjectSeedUDF = CompileScript "SaintsVendingMachines\SVM_GetObjectSeed.gek"
-	ref GetSeededRandomChanceUDF = CompileScript "SaintsVendingMachines\SVM_GetSeededRandomChance.gek"
+	ref GetObjectSeedUDF = CompileScript "SaintsVendingMachines\Utility\GetObjectSeed.gek"
+	ref GetSeededRandomChanceUDF = CompileScript "SaintsVendingMachines\Utility\GetSeededRandomChance.gek"
+	ref GetProductItemsUDF = CompileScript "SaintsVendingMachines\Products\GetProductItems.gek"
+	ref GetProductPricesUDF = CompileScript "SaintsVendingMachines\Products\GetProductPrices.gek"
 
 	; Random
 
@@ -23,7 +24,8 @@ begin function { ref rObject }
 
 	; Stock (Products)
 
-	array_var aProducts = Call GetProductsUDF
+	array_var aProductItems = Call GetProductItemsUDF
+	array_var aProducts = Ar_Keys aProductItems
 	array_var aStock = Ar_Construct "stringmap"
 
 	foreach array_var aEntry <- aProducts
@@ -65,5 +67,10 @@ begin function { ref rObject }
 	; Return
 
 	SetFunctionValue aStock
+
+	; Clean-Up
+
+	let aProductItems := Ar_Null
+	let aProducts := Ar_Null
 
 end

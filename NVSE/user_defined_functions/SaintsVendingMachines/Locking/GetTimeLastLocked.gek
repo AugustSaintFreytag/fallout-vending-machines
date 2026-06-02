@@ -1,0 +1,14 @@
+begin function { ref rObject }
+
+	short bHasStoredValue = Player.RefMapArrayGetType "SVM_TimeLastLocked" rObject
+
+	if eval bHasStoredValue == 0
+		SetFunctionValue -1
+		return
+	endif
+
+	float fDaysLastLocked = Player.RefMapArrayGetFloat "SVM_TimeLastLocked" rObject
+
+	SetFunctionValue fDaysLastLocked
+	
+end

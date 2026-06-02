@@ -2,14 +2,14 @@ begin function { ref rObject }
 
 	; UDFs
 
-	ref OnMenuConfirmUDF = CompileScript "SaintsVendingMachines\SVM_OnMenuConfirm.gek"
-	ref GetSeededRandomChanceUDF = CompileScript "SaintsVendingMachines\SVM_GetSeededRandomChance.gek"
+	ref OnMenuConfirmUDF = CompileScript "SaintsVendingMachines\OnMenuConfirm.gek"
+	ref GetSeededRandomChanceUDF = CompileScript "SaintsVendingMachines\Utility\GetSeededRandomChance.gek"
 
-	ref GetProductsUDF = CompileScript "SaintsVendingMachines\SVM_GetProducts.gek"
-	ref GetPricesUDF = CompileScript "SaintsVendingMachines\SVM_GetPrices.gek"
-	ref GetStockUDF = CompileScript "SaintsVendingMachines\SVM_GetStock.gek"
+	ref GetProductItemsUDF = CompileScript "SaintsVendingMachines\Products\GetProductItems.gek"
+	ref GetProductPricesUDF = CompileScript "SaintsVendingMachines\Products\GetProductPrices.gek"
+	ref GetStockUDF = CompileScript "SaintsVendingMachines\Stock\GetStock.gek"
 
-	ref PlayMenuOpenSoundUDF = CompileScript "SaintsVendingMachines\SVM_PlayMenuOpenSound.gek"
+	ref PlayMenuOpenSoundUDF = CompileScript "SaintsVendingMachines\Sound\PlayMenuOpenSound.gek"
 
 	; Init
 
@@ -20,14 +20,14 @@ begin function { ref rObject }
 	; Stock
 
 	array_var aProductIndices = Ar_Construct "array"
-
-	array_var aProducts = Call GetProductsUDF
-	array_var aPriceByProduct = Call GetPricesUDF
-	array_var aStockByProduct = Call GetStockUDF rObject
+	array_var aProductItems = Call GetProductItemsUDF
+	array_var aProductPrices = Call GetProductPricesUDF
+	array_var aProductStock = Call GetStockUDF rObject
+	array_var aProducts = Ar_Keys aProductItems
 
 	; Run
 
-	if eval (aStockByProduct["_Any"] > 0)
+	if eval (aProductStock["_Any"] > 0)
 		; Alternative text for bottle caps:
 		; "This vending machine has been modified to accept contemporary currency.%rYou have %g Bottle Caps in your inventory."
 		string_var sMenuText = "This vending machine accepts legal US tender.%rYou have $%g in your inventory."
@@ -36,12 +36,12 @@ begin function { ref rObject }
 			short iIndex = aEntry["key"]
 			string_var sProduct = aEntry["value"]
 
-			if eval !(Ar_HasKey aStockByProduct $sProduct) || !(Ar_HasKey aPriceByProduct $sProduct)
+			if eval !(Ar_HasKey aProductStock $sProduct) || !(Ar_HasKey aProductPrices $sProduct)
 				continue
 			endif
 
-			short iStock = aStockByProduct[$sProduct]
-			short iPrice = aPriceByProduct[$sProduct]
+			short iStock = aProductStock[$sProduct]
+			short iPrice = aProductPrices[$sProduct]
 
 			if iStock < 1
 				continue
@@ -85,8 +85,9 @@ begin function { ref rObject }
 	Sv_Destruct sMenuText
 
 	let aProducts := Ar_Null
-	let aStockByProduct := Ar_Null
-	let aPriceByProduct := Ar_Null
+	let aProductItems := Ar_Null
+	let aProductStock := Ar_Null
+	let aProductPrices := Ar_Null
 	let aProductIndices := Ar_Null
 
 end

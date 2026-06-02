@@ -1,6 +1,0 @@
-begin function {}
-
-	array_var aProducts = Ar_List "Nuka-Cola", "Nuka-Cola Quantum", "Nuka-Cola Quartz", "Nuka-Cola Victory", "Ice Cold Nuka-Cola", "Rum and Nuka"
-	SetFunctionValue aProducts
-	
-end
