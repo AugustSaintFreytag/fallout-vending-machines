@@ -12,7 +12,7 @@ begin function { ref rObject }
 	float fCurrentDays = GetGameDaysPassed 2277 08 17
 	float fDaysSinceLastLocked = fCurrentDays - fDaysLastLocked
 
-	PrintC "Getting time for machine '%z', last locked %.2f days ago (%.2f days)." sMachineId fDaysSinceLastLocked fDaysLastLocked
+	; PrintC "Getting time for machine '%z', last locked %.2f days ago (%.2f days)." sMachineId fDaysSinceLastLocked fDaysLastLocked
 
 	SetFunctionValue fDaysLastLocked
 	Sv_Destruct sMachineId

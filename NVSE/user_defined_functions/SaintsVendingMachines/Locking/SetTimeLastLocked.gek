@@ -5,7 +5,7 @@ begin function { ref rObject }
 	
 	Player.AuxStringMapArraySetFloat "SVM_TimeLastLockedByMachineId" ($sMachineId) fTimeLastLocked
 
-	PrintC "Setting time last locked for machine '%z' to current time, %.2f days." sMachineId fTimeLastLocked
+	; PrintC "Setting time last locked for machine '%z' to current time, %.2f days." sMachineId fTimeLastLocked
 
 	Sv_Destruct sMachineId
 
