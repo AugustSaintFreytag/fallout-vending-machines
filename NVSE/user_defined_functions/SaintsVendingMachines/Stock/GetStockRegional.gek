@@ -6,11 +6,11 @@ begin function { ref rObject }
 	if eval sRegionName == "MegatonWorld"
 		let aStock["_Any"] := 1
 		let aStock["Nuka-Cola"] := 1
-	elseif eval sRegionName == "PointLookout"
+	elseif eval sRegionName == "DLC4Pointlookout"
 		let aStock["_Any"] := 1
 		let aStock["Nuka-Cola"] := 1
 	else
-		;PrintC "No regional vending machine stock for world space '%z'." (sRegionName)
+		PrintC "No regional vending machine stock for world space '%z'." (sRegionName)
 	endif
 
 	SetFunctionValue aStock
