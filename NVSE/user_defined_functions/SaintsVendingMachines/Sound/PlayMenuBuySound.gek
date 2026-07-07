@@ -17,6 +17,6 @@ begin function {}
 	
 	Player.PlaySound rSound
 
-		AuxiliaryVariableSetRef "*SVM_rMenuBuySound" rSound
+	AuxiliaryVariableSetRef "*SVM_rMenuBuySound" rSound
 
 end
