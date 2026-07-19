@@ -10,5 +10,7 @@ begin function {}
 	let aItemByProduct["Rum and Nuka"] := RumNukaCola
 
 	SetFunctionValue aItemByProduct
+	
+	let aItemByProduct := Ar_Null
 
 end

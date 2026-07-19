@@ -13,4 +13,6 @@ begin function {}
 
 	SetFunctionValue aPriceByProduct
 
+	let aPriceByProduct := Ar_Null
+
 end
