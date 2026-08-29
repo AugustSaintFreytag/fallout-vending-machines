@@ -30,7 +30,7 @@ begin function { ref rObject }
 	if eval (aProductStock["_Any"] > 0)
 		; Alternative text for bottle caps:
 		; "This vending machine has been modified to accept contemporary currency.%rYou have %g Bottle Caps in your inventory."
-		string_var sMenuText = "This vending machine accepts legal US tender.%rYou have $%g in your inventory."
+		string_var sMenuText = "^Nuka-Cola Vending Machine^This vending machine accepts legal US tender.%rYou have $%g in your inventory."
 		
 		foreach array_var aEntry <- aProducts
 			short iIndex = aEntry["key"]
