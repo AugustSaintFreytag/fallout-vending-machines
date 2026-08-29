@@ -1,8 +1,3 @@
-; UDFs
-
-ref OnActivateUDF = CompileScript "SaintsVendingMachines\OnActivate.gek"
-ref ScanAndLockUDF = CompileScript "SaintsVendingMachines\ScanAndLock.gek"
-
 ; Legacy State
 
 RefMapArrayDestroy "SVM_TimeLastLocked"
@@ -10,16 +5,7 @@ RefMapArrayDestroy "SVM_TimeLastLocked"
 ; Cell Enter Event
 
 SetEventHandler "OnCellEnter" (begin function { ref rEnteredCell }
-	Call ScanAndLockUDF
-end)
-
-; Post Load Game Event
-
-SetEventHandler "PostLoadGame" (begin function { short bSuccessfullyLoaded }
-	if eval !bSuccessfullyLoaded
-		return
-	endif
-
+	ref ScanAndLockUDF = CompileScript "SaintsVendingMachines\ScanAndLock.gek"
 	Call ScanAndLockUDF
 end)
 
@@ -34,6 +20,13 @@ SetEventHandlerAlt "ShowOff:OnPreActivate" (begin function { ref rActivator, sho
 		endif
 
 		SetFunctionValue 0
+
+		ref OnActivateUDF = CompileScript "SaintsVendingMachines\OnActivate.gek"
 		Call OnActivateUDF rActivated
 	endif
 end) 1::Player
+
+; Post-Load
+
+ref ScanAndLockUDF = CompileScript "SaintsVendingMachines\ScanAndLock.gek"
+Call ScanAndLockUDF

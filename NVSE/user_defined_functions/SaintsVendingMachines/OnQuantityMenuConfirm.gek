@@ -1,0 +1,37 @@
+begin function { short iQuantity }
+
+	; UDFs
+
+	ref PurchaseProductUDF = CompileScript "SaintsVendingMachines\PurchaseProduct.gek"
+	ref PlayMenuCancelSoundUDF = CompileScript "SaintsVendingMachines\Sound\PlayMenuCancelSound.gek"
+
+	; State
+
+	ref rItem = Player.AuxiliaryVariableGetRef "*SVM_rPendingProduct"
+	short iPrice = Player.AuxiliaryVariableGetFloat "*SVM_iPendingProductPrice"
+
+	Player.AuxiliaryVariableErase "*SVM_rPendingProduct"
+	Player.AuxiliaryVariableErase "*SVM_iPendingProductPrice"
+
+	; Run
+
+	if iQuantity == -1
+		Call PlayMenuCancelSoundUDF
+		return
+	endif
+
+	if eval (iQuantity < 1) || (iQuantity > 20)
+		PrintC "Could not process vending machine purchase, invalid quantity %g." iQuantity
+		Call PlayMenuCancelSoundUDF
+		return
+	endif
+
+	if eval (rItem == 0) || (iPrice < 1)
+		PrintC "Could not process vending machine purchase, missing pending product data."
+		Call PlayMenuCancelSoundUDF
+		return
+	endif
+
+	Call PurchaseProductUDF rItem iPrice iQuantity
+
+end
