@@ -4,8 +4,9 @@ begin function { short iSparseIndex }
 
 	ref GetProductItemsUDF = CompileScript "SaintsVendingMachines\Products\GetProductItems.gek"
 	ref GetProductPricesUDF = CompileScript "SaintsVendingMachines\Products\GetProductPrices.gek"
+	ref OnQuantityMenuConfirmUDF = CompileScript "SaintsVendingMachines\OnQuantityMenuConfirm.gek"
+	ref PurchaseProductUDF = CompileScript "SaintsVendingMachines\PurchaseProduct.gek"
 	ref PlayMenuCancelSoundUDF = CompileScript "SaintsVendingMachines\Sound\PlayMenuCancelSound.gek"
-	ref PlayMenuBuySoundUDF = CompileScript "SaintsVendingMachines\Sound\PlayMenuBuySound.gek"
 
 	; UDFs (Local)
 
@@ -18,28 +19,6 @@ begin function { short iSparseIndex }
 		else
 			PrintC "Could not find valid container close sound for object '%z'." (GetName rObject)
 		endif
-	end)
-
-	ref PurchaseProductUDF = (begin function { ref rItem, short iPrice }
-		Call PlayMenuBuySoundUDF
-		
-		Player.RemoveItem PrewarMoney iPrice 1
-		
-		CallAfter 1.4 (begin function {} 
-			Player.AddItem rItem 1
-			Player.PlaySound PHYBottleH 1
-		end)
-	end)
-
-	ref TryPurchaseProductUDF = (begin function { ref rItem, short iPrice } 
-		short iPlayerCurrency = Player.GetItemCount PrewarMoney
-
-		if eval iPlayerCurrency < iPrice
-			MessageExAlt 2 "Interface\Icons\Message Icons\glow_message_vaultboy_sad.dds|You don't have enough Pre-War Money to make this purchase."
-			return
-		endif
-
-		Call PurchaseProductUDF rItem iPrice
 	end)
 
 	; References
@@ -86,7 +65,27 @@ begin function { short iSparseIndex }
 
 	if eval (rItem != 0) && (iPrice > 0)
 		;PrintC "Processing purchase for '%z', incoming index %g, product index %g, product '%z', price %g." (GetFormIDString rObject) iSparseIndex iIndex (GetName rItem) iPrice
-		Call TryPurchaseProductUDF rItem iPrice
+		short bIsShiftPressed = (IsKeyPressed 42) || (IsKeyPressed 54)
+
+		if bIsShiftPressed
+			short iPlayerCurrency = Player.GetItemCount PrewarMoney
+			short iMaxQuantity = Floor(iPlayerCurrency / iPrice)
+
+			if iMaxQuantity < 1
+				Call PurchaseProductUDF rItem iPrice 1
+			else
+				if iMaxQuantity > 20
+					let iMaxQuantity := 20
+				endif
+
+				Player.AuxiliaryVariableSetRef "*SVM_rPendingProduct" rItem
+				Player.AuxiliaryVariableSetFloat "*SVM_iPendingProductPrice" iPrice
+
+				ShowQuantityMenu OnQuantityMenuConfirmUDF iMaxQuantity 1
+			endif
+		else
+			Call PurchaseProductUDF rItem iPrice 1
+		endif
 	else
 		;PrintC "Canceling purchase for '%z' due to missing product, incoming index %g, product index %g." (GetFormIDString rObject) iSparseIndex iIndex
 		Call PlayMenuCancelSoundUDF

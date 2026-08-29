@@ -1,0 +1,33 @@
+begin function { ref rItem, short iPrice, short iQuantity }
+
+	; UDFs
+
+	ref PlayMenuBuySoundUDF = CompileScript "SaintsVendingMachines\Sound\PlayMenuBuySound.gek"
+
+	; Validate
+
+	if eval (rItem == 0) || (iPrice < 1) || (iQuantity < 1) || (iQuantity > 20)
+		PrintC "Could not process vending machine purchase, invalid item, price, or quantity."
+		return
+	endif
+
+	short iTotalPrice = iPrice * iQuantity
+	short iPlayerCurrency = Player.GetItemCount PrewarMoney
+
+	if eval iPlayerCurrency < iTotalPrice
+		MessageExAlt 2 "Interface\Icons\Message Icons\glow_message_vaultboy_sad.dds|You don't have enough Pre-War Money to make this purchase."
+		return
+	endif
+
+	; Purchase
+
+	Call PlayMenuBuySoundUDF
+
+	Player.RemoveItem PrewarMoney iTotalPrice 1
+
+	CallAfter 1.4 (begin function { ref rDelayedItem, short iDelayedQuantity }
+		Player.AddItem rDelayedItem iDelayedQuantity
+		Player.PlaySound PHYBottleH 1
+	end) 0 rItem iQuantity
+
+end
